@@ -1,0 +1,1941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Website Builder Pro — Rishabh Sharma</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0A1628;color:#fff;min-height:100vh;overflow-x:hidden;}
+
+/* ── Header ── */
+.hdr{background:linear-gradient(135deg,#0A1628,#1A3A5C);padding:12px 24px;border-bottom:2px solid #C9A84C55;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hdr-left h1{font-size:18px;font-weight:900;}.hdr-left h1 span{color:#C9A84C;}
+.hdr-left p{font-size:10px;color:#7EB8F7;margin-top:2px;}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.btn-settings{background:#1A3A5C;border:1px solid #C9A84C55;color:#C9A84C;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;}
+.btn-settings:hover{background:#C9A84C22;}
+
+/* ── Main 2-column layout ── */
+.main{display:grid;grid-template-columns:420px 1fr;height:calc(100vh - 54px);}
+
+/* ── LEFT PANEL ── */
+.left-panel{overflow-y:auto;border-right:1px solid #1A3A5C;background:#0A1628;}
+.left-inner{padding:16px;}
+
+/* ── Sections ── */
+.sec{background:#0D1F35;border:1px solid #1A3A5C;border-radius:10px;padding:14px;margin-bottom:12px;}
+.sec-title{font-size:10px;font-weight:700;color:#7EB8F7;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+label{display:block;font-size:11px;font-weight:600;color:#7EB8F7;margin:8px 0 3px;}
+label:first-of-type{margin-top:0;}
+input,select,textarea{width:100%;background:#050D1A;color:#fff;border:1px solid #1A3A5C;border-radius:7px;padding:9px 11px;font-size:13px;outline:none;transition:border-color 0.2s;}
+input:focus,select:focus,textarea:focus{border-color:#0A66C2;}
+select option{background:#050D1A;}
+.key-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:end;}
+.key-row input{margin:0;}
+.btn-save-key{background:#C9A84C;color:#1A1A1A;border:none;padding:9px 12px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.key-status{font-size:10px;margin-top:3px;}
+.key-ok{color:#1D9E75;}.key-no{color:#ff6b6b;}
+
+/* Quick paste */
+.qbox{background:#1A1A08;border:1px solid #C9A84C44;border-radius:8px;padding:12px;margin-bottom:12px;}
+.qbox label{color:#C9A84C;margin-top:0;}
+.qbox textarea{background:#08080A;color:#E8D5A3;font-family:monospace;font-size:11px;}
+.btn-gold{width:100%;background:#C9A84C;color:#1A1A1A;border:none;padding:9px;border-radius:7px;font-size:12px;font-weight:700;margin-top:6px;cursor:pointer;}
+
+/* Image upload */
+.img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;}
+.img-slot{border:1.5px dashed #1A3A5C;border-radius:7px;height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.img-slot:hover{border-color:#0A66C2;}
+.img-slot input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.img-slot img{width:100%;height:100%;object-fit:cover;border-radius:5px;position:absolute;inset:0;}
+.img-slot .ico{font-size:16px;position:relative;z-index:1;}
+.img-slot .lbl{font-size:8px;color:#7EB8F7;text-align:center;position:relative;z-index:1;margin-top:2px;}
+.img-slot.filled .ico,.img-slot.filled .lbl{opacity:0;}
+
+/* Color */
+.color-row{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px;}
+.co{border:2px solid transparent;border-radius:7px;padding:6px 3px;cursor:pointer;text-align:center;font-size:9px;font-weight:700;transition:all 0.2s;}
+.co.sel{border-color:#fff;box-shadow:0 0 0 2px #0A66C2;}
+
+/* Features */
+.feat-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.feat{border:1px solid #1A3A5C;border-radius:14px;padding:4px 10px;cursor:pointer;font-size:10px;font-weight:600;color:#7EB8F7;transition:all 0.2s;white-space:nowrap;}
+.feat.sel{border-color:#1D9E75;background:#1D9E7522;color:#1D9E75;}
+
+/* Generate button */
+.btn-gen{width:100%;background:linear-gradient(135deg,#0A66C2,#1D9E75);color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(10,102,194,0.4);transition:all 0.3s;margin-top:4px;}
+.btn-gen:disabled{background:#1A2A3A;box-shadow:none;cursor:not-allowed;color:#555;}
+
+/* Progress */
+.prog-wrap{display:none;background:#050D1A;border-radius:10px;padding:12px;margin-top:10px;}
+.prog-wrap.show{display:block;}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.prog-title{font-size:12px;font-weight:700;}
+.prog-pct{font-size:11px;color:#7EB8F7;}
+.prog-bar-bg{background:#0D1F35;border-radius:20px;height:5px;margin-bottom:8px;}
+.prog-bar{height:5px;border-radius:20px;background:linear-gradient(90deg,#0A66C2,#1D9E75);transition:width 0.4s;width:0%;}
+.step-list{max-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.step{font-size:10px;font-family:monospace;padding:1px 0;color:#444;}
+.step.done{color:#6ddf6d;}.step.act{color:#7EB8F7;}.step.err{color:#ff9944;}
+
+/* Result buttons */
+.res-btns{display:none;margin-top:10px;}
+.res-btns.show{display:flex;flex-direction:column;gap:8px;}
+.btn-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ba{padding:10px;border-radius:8px;font-size:12px;font-weight:700;border:none;cursor:pointer;text-align:center;}
+.b-prev{background:#1A3A5C;color:#7EB8F7;border:1px solid #0A66C2;}
+.b-dl{background:#0A66C2;color:#fff;}
+.b-wa{background:#25D366;color:#fff;width:100%;padding:11px;border-radius:8px;font-size:12px;font-weight:700;border:none;cursor:pointer;}
+.res-info{font-size:10px;color:#7EB8F7;background:#050D1A;border-radius:7px;padding:8px 10px;line-height:1.6;}
+
+/* ── RIGHT PANEL ── */
+.right-panel{background:#050D1A;display:flex;flex-direction:column;}
+.prev-topbar{background:#0D1F35;border-bottom:1px solid #1A3A5C;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.prev-topbar .dots{display:flex;gap:5px;}
+.prev-topbar .dot{width:10px;height:10px;border-radius:50%;}
+.prev-title{font-size:12px;color:#7EB8F7;font-weight:600;}
+.prev-actions{display:flex;gap:8px;}
+.btn-tiny{background:#1A3A5C;border:1px solid #1A3A5C;color:#7EB8F7;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;}
+.btn-tiny:hover{border-color:#0A66C2;color:#fff;}
+.prev-frame-wrap{flex:1;position:relative;}
+.prev-frame-wrap iframe{width:100%;height:100%;border:none;background:#fff;}
+.prev-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#1A3A5C;}
+.prev-placeholder .icon{font-size:60px;margin-bottom:16px;}
+.prev-placeholder p{font-size:14px;color:#2A4A6A;text-align:center;line-height:1.6;max-width:300px;}
+.prev-placeholder .arrow{font-size:24px;color:#C9A84C;margin-top:12px;animation:bounce-left 1.5s infinite;}
+@keyframes bounce-left{0%,100%{transform:translateX(0);}50%{transform:translateX(-8px);}}
+
+/* Mobile responsive */
+@media(max-width:900px){
+  .main{grid-template-columns:1fr;height:auto;}
+  .left-panel{height:auto;}
+  .right-panel{height:600px;}
+}
+footer{text-align:center;font-size:10px;color:#1A3A5C;padding:10px;border-top:1px solid #1A3A5C;}
+footer a{color:#7EB8F7;}
+
+/* ── v3 additions ── */
+.img-grid{grid-template-columns:repeat(4,1fr);}
+.img-slot{height:58px;}
+.slot-x{position:absolute;top:2px;right:2px;z-index:4;width:16px;height:16px;border-radius:50%;border:none;background:rgba(0,0,0,.7);color:#fff;font-size:11px;line-height:16px;cursor:pointer;display:none;padding:0;}
+.img-slot.filled .slot-x{display:block;}
+.img-slot .lbl{max-width:100%;padding:0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mini-t{font-size:10px;color:#7EB8F7;font-weight:700;margin:12px 0 4px;text-transform:uppercase;letter-spacing:.5px;}
+.mini-t:first-of-type{margin-top:0;}
+.mini-t small{color:#5F82A8;font-weight:500;text-transform:none;letter-spacing:0;}
+.chk{display:flex;align-items:center;gap:6px;font-size:10px;color:#7EB8F7;margin-top:8px;font-weight:600;cursor:pointer;}
+.chk input{width:auto;margin:0;}
+.ai-box{border-radius:8px;padding:10px;margin-bottom:10px;border:1px solid;}
+.ai-box.ok{background:#051A0A;border-color:#1D9E7566;}
+.ai-box.bad{background:#2a0a0a;border-color:#ff6b6b77;}
+.ai-box.wait{background:#0D1F35;border-color:#1A3A5C;}
+.ai-box .t{font-size:11px;font-weight:700;margin-bottom:4px;}
+.ai-box.ok .t{color:#1D9E75;}.ai-box.bad .t{color:#ff8a8a;}.ai-box.wait .t{color:#7EB8F7;}
+.ai-box .d{font-size:10px;line-height:1.6;color:#9CC6F5;word-break:break-word;}
+.btn-mini{background:#1A3A5C;border:1px solid #0A66C2;color:#7EB8F7;padding:7px 10px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;margin-top:8px;width:100%;}
+.btn-mini:hover{background:#0A66C2;color:#fff;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.co.rnd{background:repeating-linear-gradient(45deg,#2a4a6a,#2a4a6a 6px,#0D1F35 6px,#0D1F35 12px);color:#fff;}
+.hint{font-size:10px;color:#5F82A8;line-height:1.5;margin-top:4px;}
+.warn-note{font-size:10px;color:#ffcf6b;background:#2a2108;border:1px solid #6b5518;border-radius:7px;padding:7px 9px;margin-top:6px;line-height:1.5;}
+.gal-add{border:1.5px dashed #1A3A5C;border-radius:7px;height:58px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;color:#7EB8F7;font-size:11px;font-weight:700;text-align:center;line-height:1.2;}
+.gal-add input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="hdr">
+  <div class="hdr-left">
+    <h1>🚀 AI Website <span>Builder Pro</span></h1>
+    <p>Free templates + optional Claude AI · Unique design har baar · Client photos · Sliders · Fully Responsive</p>
+  </div>
+  <div class="hdr-right">
+    <span id="ai-badge" style="font-size:10px;color:#7EB8F7;background:#0D1F35;border:1px solid #1A3A5C;padding:4px 10px;border-radius:20px;">Checking…</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- ── LEFT PANEL ── -->
+  <div class="left-panel">
+    <div class="left-inner">
+
+      <!-- Setup -->
+      <div class="sec">
+        <div class="sec-title">⚙️ Setup</div>
+        <label>Mode</label>
+        <select id="mode" onchange="setMode(this.value)">
+          <option value="free">🆓 Free mode — bina API, ready-made designs (default)</option>
+          <option value="claude">⭐ Claude AI mode — API credits lagte hain</option>
+        </select>
+        <div class="hint" id="mode-hint" style="margin-bottom:10px;">Free mode me koi API / paisa nahi lagta. Har baar naya layout, font aur colour mix aata hai (20 industries).</div>
+        <div id="claude-setup" style="display:none;">
+        <div class="ai-box wait" id="ai-box"><div class="t">Claude connection check ho raha hai…</div><div class="d"></div></div>
+        <button class="btn-mini" style="margin-top:0;margin-bottom:10px;" onclick="testClaude()">🧪 Test Claude (1 chhota call)</button>
+        <div id="ai-test" style="font-size:10px;line-height:1.6;margin-bottom:10px;"></div>
+        </div>
+        <label>Unsplash Key (stock photos — Optional)</label>
+        <div class="key-row">
+          <input type="password" id="uk" placeholder="unsplash.com/developers — FREE">
+          <button class="btn-save-key" onclick="saveKey('uk')">Save</button>
+        </div>
+        <div class="key-status" id="uk-status"></div>
+        <button class="btn-mini" onclick="testUnsplash()">🔍 Test Unsplash</button>
+        <div id="test-result" style="font-size:10px;margin-top:6px;line-height:1.6;"></div>
+        <div class="hint">Claude mode ke liye key page me nahi daalni — sirf Vercel → Environment Variables me (<b>ANTHROPIC_API_KEY</b>).</div>
+      </div>
+
+      <!-- Quick Paste -->
+      <div class="qbox">
+        <label>⚡ Google Maps data paste karo</label>
+        <textarea id="qp" rows="3" placeholder="Poora Google Maps listing copy-paste karo (naam, rating, address, phone, services...)&#10;ya:&#10;Business: Smile Dental&#10;Location: Delhi&#10;Phone: +91 98765 43210&#10;Services: Braces, Implants"></textarea>
+        <button class="btn-gold" onclick="autofill()">✨ Auto Fill</button>
+      </div>
+
+      <!-- Business Details -->
+      <div class="sec">
+        <div class="sec-title">📋 Business Details</div>
+        <label>Industry</label>
+        <select id="bt">
+          <option value="">-- Select Industry --</option>
+          <option value="dental clinic">🦷 Dental Clinic</option>
+          <option value="medical spa aesthetic clinic">💆 Medical Spa</option>
+          <option value="wellness yoga center">🌿 Wellness Center</option>
+          <option value="luxury real estate agency">🏠 Real Estate</option>
+          <option value="restaurant cafe fine dining">🍽️ Restaurant</option>
+          <option value="law firm legal services">⚖️ Law Firm</option>
+          <option value="gym fitness center">💪 Gym / Fitness</option>
+          <option value="education coaching institute">📚 Education</option>
+          <option value="ecommerce online store">🛒 E-Commerce</option>
+          <option value="interior design studio">🛋️ Interior Design</option>
+          <option value="photography studio">📸 Photography</option>
+          <option value="travel agency">✈️ Travel Agency</option>
+          <option value="hospital clinic">🏥 Hospital</option>
+          <option value="CA accounting firm">📊 CA Firm</option>
+          <option value="news magazine">📰 News / Magazine</option>
+          <option value="fashion boutique">👗 Fashion</option>
+          <option value="digital marketing agency">💻 Digital Marketing</option>
+          <option value="hotel resort">🏨 Hotel / Resort</option>
+          <option value="salon beauty parlour">💇 Salon & Beauty</option>
+          <option value="construction firm">🏗️ Construction</option>
+        </select>
+        <label>Business Name</label>
+        <input type="text" id="bn" placeholder="e.g. Smile Care Dental">
+        <label>Location</label>
+        <input type="text" id="loc" placeholder="e.g. South Delhi, India">
+        <label>Key Services <small style="font-weight:500;color:#5F82A8">(comma se alag — max 8 website par aate hain)</small></label>
+        <input type="text" id="svc" placeholder="e.g. Braces, Implants, Whitening">
+        <label>WhatsApp / Phone Number</label>
+        <input type="text" id="wa" placeholder="+91 98765 43210">
+        <div class="two">
+          <div><label>Google Rating <small style="font-weight:500;color:#5F82A8">(optional)</small></label><input type="text" id="rating" placeholder="4.7"></div>
+          <div><label>Reviews count <small style="font-weight:500;color:#5F82A8">(optional)</small></label><input type="text" id="rvn" placeholder="170"></div>
+        </div>
+        <label>Opening Hours <small style="font-weight:500;color:#5F82A8">(optional)</small></label>
+        <input type="text" id="hours" placeholder="Mon–Sat 10AM – 8PM">
+        <label>Extra Info / USP</label>
+        <textarea id="ext" rows="2" placeholder="15 years exp, free consultation, painless..."></textarea>
+      </div>
+
+      <!-- Real reviews -->
+      <div class="sec">
+        <div class="sec-title">⭐ Real Reviews <small style="text-transform:none;font-weight:500;color:#5F82A8">(optional)</small></div>
+        <textarea id="revs" rows="4" placeholder="Google ke asli reviews paste karo. Har review ke beech khaali line.&#10;Pehli line me naam, neeche review:&#10;&#10;Riya S.&#10;Bahut accha service, staff friendly hai.&#10;&#10;Amit K.&#10;Time par kaam hua."></textarea>
+        <div class="hint">Reviews nahi doge to testimonials section me "Sample" label wale placeholder cards aayenge — client ko dene se pehle asli reviews se badal dena.</div>
+      </div>
+
+      <!-- Client Images -->
+      <div class="sec">
+        <div class="sec-title">🖼️ Client Photos (Optional)</div>
+        <div class="mini-t">Hero banner <small>— 2 ya 3 photo = auto slider</small></div>
+        <div class="img-grid" id="grid-hero"></div>
+        <div class="mini-t">About photo &amp; Logo</div>
+        <div class="img-grid" id="grid-misc"></div>
+        <div class="mini-t">Service photos <small>— upar Key Services se apne aap bante hain</small></div>
+        <div class="img-grid" id="grid-svc"></div>
+        <label class="chk"><input type="checkbox" id="unsvc"> Jin services ki photo nahi di, unki Unsplash se auto-photo lo</label>
+        <div class="mini-t">Gallery <small>— kitni bhi photos ek saath select karo (max 12)</small></div>
+        <div class="img-grid" id="grid-gal"></div>
+        <div class="hint">Photos browser me chhoti (compress) hoke website me embed hoti hain — Download HTML me sab saath jaata hai.</div>
+      </div>
+
+      <!-- Design -->
+      <div class="sec">
+        <div class="sec-title">🎨 Design</div>
+        <label>Color Theme</label>
+        <div class="color-row" id="cr">
+          <div class="co sel" data-v="blue" style="background:linear-gradient(135deg,#0A66C2,#1A3A5C);color:#fff" onclick="selC(this)">Blue Pro</div>
+          <div class="co" data-v="gold" style="background:linear-gradient(135deg,#C9A84C,#111);color:#fff" onclick="selC(this)">Dark Gold</div>
+          <div class="co" data-v="green" style="background:linear-gradient(135deg,#1D9E75,#0F6E56);color:#fff" onclick="selC(this)">Green</div>
+          <div class="co" data-v="purple" style="background:linear-gradient(135deg,#7C3AED,#4C1D95);color:#fff" onclick="selC(this)">Purple</div>
+          <div class="co" data-v="red" style="background:linear-gradient(135deg,#DC2626,#991B1B);color:#fff" onclick="selC(this)">Red</div>
+          <div class="co" data-v="teal" style="background:linear-gradient(135deg,#0D9488,#0F766E);color:#fff" onclick="selC(this)">Teal</div>
+          <div class="co" data-v="rose" style="background:linear-gradient(135deg,#BE185D,#9D174D);color:#fff" onclick="selC(this)">Rose</div>
+          <div class="co" data-v="orange" style="background:linear-gradient(135deg,#EA580C,#C2410C);color:#fff" onclick="selC(this)">Orange</div>
+          <div class="co rnd" data-v="random" onclick="selC(this)">🎲 Random</div>
+        </div>
+        <input type="hidden" id="ct" value="blue">
+        <label>Design Style</label>
+        <select id="sp">
+          <option value="">🎯 Auto — industry ke hisaab se</option>
+          <option value="luxury">💎 Luxury / Elegant</option>
+          <option value="clean">🩺 Clean &amp; Trustworthy</option>
+          <option value="bold">⚡ Bold &amp; Energetic</option>
+          <option value="warm">☕ Warm &amp; Friendly</option>
+          <option value="editorial">📰 Editorial / Magazine</option>
+        </select>
+        <div class="hint">Har "Build" dabane par naya layout, font aur sections ka style aata hai — pichle 3 designs repeat nahi hote.</div>
+        <label>Sections</label>
+        <div class="feat-wrap" id="sec-wrap">
+          <div class="feat sel" data-v="about">👤 About</div>
+          <div class="feat sel" data-v="process">🧭 Process / Why Us</div>
+          <div class="feat sel" data-v="gallery">🖼️ Gallery</div>
+          <div class="feat sel" data-v="testimonials">⭐ Reviews</div>
+          <div class="feat sel" data-v="faq">❓ FAQ</div>
+        </div>
+        <label>Features</label>
+        <div class="feat-wrap" id="feat-wrap">
+          <div class="feat sel" data-v="whatsapp">💬 WhatsApp</div>
+          <div class="feat sel" data-v="counters">🔢 Count-Up</div>
+          <div class="feat sel" data-v="sticky_header">📌 Sticky Nav</div>
+          <div class="feat" data-v="loader">⏳ Loader</div>
+          <div class="feat sel" data-v="back_top">⬆️ Back Top</div>
+          <div class="feat sel" data-v="scroll_bar">📊 Scroll Bar</div>
+        </div>
+      </div>
+
+      <button class="btn-gen" id="gen-btn" onclick="generate()">🧠 Build Complete Website</button>
+
+      <!-- Progress -->
+      <div class="prog-wrap" id="prog">
+        <div class="prog-top">
+          <span class="prog-title" id="ptitle">Building...</span>
+          <span class="prog-pct" id="ppct">0%</span>
+        </div>
+        <div class="prog-bar-bg"><div class="prog-bar" id="pbar"></div></div>
+        <div class="step-list" id="steps" style="max-height:170px;"></div>
+      </div>
+
+      <!-- Result -->
+      <div class="res-btns" id="res-btns">
+        <div class="res-info" id="res-info"></div>
+        <div class="btn-row2">
+          <button class="ba b-prev" onclick="showPreview()">👁️ Show Preview</button>
+          <button class="ba b-dl" onclick="dlPage()">⬇️ Download</button>
+        </div>
+        <button class="ba b-prev" style="width:100%" onclick="generate()">🎲 Naya Design Banao (same details)</button>
+        <button class="b-wa ba" onclick="shareWA()">💬 Share on WhatsApp</button>
+      </div>
+
+      <footer>By <a href="https://linkedin.com/in/rishab-sharma-dev">Rishabh Sharma</a> · Web Dev · Delhi</footer>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL — PREVIEW ── -->
+  <div class="right-panel">
+    <div class="prev-topbar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="dots">
+          <div class="dot" style="background:#E53935;"></div>
+          <div class="dot" style="background:#C9A84C;"></div>
+          <div class="dot" style="background:#1D9E75;"></div>
+        </div>
+        <span class="prev-title" id="prev-title">Preview — Generate karo to website dikhegi</span>
+      </div>
+      <div class="prev-actions">
+        <button class="btn-tiny" onclick="openNewTab()">🌐 New Tab</button>
+        <button class="btn-tiny" onclick="dlPage()">⬇️ Download</button>
+      </div>
+    </div>
+    <div class="prev-frame-wrap" id="prev-wrap">
+      <div class="prev-placeholder" id="prev-placeholder">
+        <div class="icon">🖥️</div>
+        <p>Business details bharo aur<br><strong>"Build Complete Website"</strong><br>dabao — website yahan dikhegi</p>
+        <div class="arrow">←</div>
+      </div>
+      <iframe id="prev-frame" style="display:none;"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  AI Website Builder Pro — builder UI
+// ═══════════════════════════════════════════════════════════════════════════
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function lsGet(k, d){ try{ var v = localStorage.getItem(k); return v === null ? d : v; }catch(e){ return d; } }
+function lsSet(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+
+var PAL = {
+  blue:  {p:'#0A66C2',s:'#1A3A5C',a:'#FF6B35',bg:'#0A1628',lt:'#EFF6FF',td:'#1A1A2E',tm:'#5B6472',gr:'linear-gradient(135deg,#0A66C2,#1A3A5C)'},
+  gold:  {p:'#B8860B',s:'#1A1A1A',a:'#E8C97A',bg:'#0D0D0D',lt:'#FBF6EC',td:'#1A1A1A',tm:'#6b6b6b',gr:'linear-gradient(135deg,#C9A84C,#8B6914)'},
+  green: {p:'#1D9E75',s:'#0F6E56',a:'#34D399',bg:'#0B3D2E',lt:'#ECFDF5',td:'#1A2E25',tm:'#4B5563',gr:'linear-gradient(135deg,#1D9E75,#0F6E56)'},
+  purple:{p:'#7C3AED',s:'#4C1D95',a:'#A78BFA',bg:'#1A0A2E',lt:'#F5F3FF',td:'#2D1B69',tm:'#5B6472',gr:'linear-gradient(135deg,#7C3AED,#4C1D95)'},
+  red:   {p:'#DC2626',s:'#991B1B',a:'#F87171',bg:'#1A0505',lt:'#FEF2F2',td:'#7F1D1D',tm:'#5B6472',gr:'linear-gradient(135deg,#DC2626,#991B1B)'},
+  teal:  {p:'#0D9488',s:'#0F766E',a:'#2DD4BF',bg:'#003D36',lt:'#F0FDFA',td:'#134E4A',tm:'#4B5563',gr:'linear-gradient(135deg,#0D9488,#0F766E)'},
+  rose:  {p:'#BE185D',s:'#9D174D',a:'#FB7185',bg:'#1A0010',lt:'#FFF1F2',td:'#881337',tm:'#5B6472',gr:'linear-gradient(135deg,#BE185D,#9D174D)'},
+  orange:{p:'#EA580C',s:'#C2410C',a:'#FCD34D',bg:'#1A0A00',lt:'#FFF7ED',td:'#7C2D12',tm:'#5B6472',gr:'linear-gradient(135deg,#EA580C,#C2410C)'}
+};
+
+// ── Claude status (the key lives on the server, not in this page) ──────────
+var AI_OK = null;
+function setBox(kind, title, detail){
+  var b = $('ai-box'); if(!b) return;
+  b.className = 'ai-box ' + kind;
+  b.innerHTML = '<div class="t">' + title + '</div><div class="d">' + (detail || '') + '</div>';
+}
+function setBadge(kind, text){
+  var el = $('ai-badge'); if(!el) return;
+  var m = {ok:['#1D9E75','#1D9E7522'], bad:['#ff8a8a','#ff6b6b22'], wait:['#7EB8F7','#0D1F35']}[kind];
+  el.style.color = m[0]; el.style.background = m[1]; el.style.borderColor = m[0]; el.textContent = text;
+}
+async function checkAI(){
+  setBox('wait', 'Claude connection check ho raha hai…', '');
+  setBadge('wait', 'Checking…');
+  try{
+    var r = await fetch('/api/health', {cache:'no-store'});
+    var txt = await r.text(), d = null;
+    try{ d = JSON.parse(txt); }catch(_){}
+    if(!r.ok || !d){
+      AI_OK = false;
+      setBox('bad', '⚠️ Server ne jawab nahi diya (HTTP ' + r.status + ')',
+        'Response: ' + esc(txt.slice(0, 160)) + '<br>Vercel me latest Deployment "Ready" hona chahiye.');
+      setBadge('bad', 'Server error ' + r.status); return;
+    }
+    if(d.key_configured){
+      AI_OK = true;
+      setBox('ok', '✅ Server par Claude key mil gayi', 'Model: ' + esc(d.model) + '. Key Vercel me safe hai — page me daalne ki zaroorat nahi. Pakka karne ke liye "Test Claude" dabao.');
+      setBadge('ok', '⭐ Claude key set');
+    } else {
+      AI_OK = false;
+      setBox('bad', '⚠️ ANTHROPIC_API_KEY Vercel me set nahi hai',
+        'Vercel → Project → Settings → Environment Variables me <b>ANTHROPIC_API_KEY</b> naam se apni <b>sk-ant-…</b> key daalo → Save → Deployments → Redeploy.');
+      setBadge('bad', 'Claude key missing');
+    }
+  }catch(e){
+    AI_OK = false;
+    setBox('bad', '⚠️ Server tak nahi pahunch paaye', esc(e.message));
+    setBadge('bad', 'Offline');
+  }
+}
+async function testClaude(){
+  var el = $('ai-test');
+  el.style.color = '#7EB8F7'; el.textContent = 'Claude ko ek chhota message bhej raha hoon…';
+  try{
+    var r = await fetch('/api/generate', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({section:'ping'})});
+    var txt = await r.text(), d = null;
+    try{ d = JSON.parse(txt); }catch(_){}
+    if(r.ok && d && d.ok){
+      el.style.color = '#1D9E75'; el.textContent = '✅ Claude chal raha hai (model ' + d.model + ', jawab: "' + d.reply + '")';
+      AI_OK = true; setBadge('ok', '⭐ Claude working');
+    } else {
+      el.style.color = '#ff8a8a';
+      el.textContent = '❌ HTTP ' + r.status + ' — ' + ((d && d.error) ? d.error : txt.slice(0, 200));
+      AI_OK = false; setBadge('bad', 'Claude error');
+    }
+  }catch(e){ el.style.color = '#ff8a8a'; el.textContent = '❌ ' + e.message; }
+}
+
+// ── Unsplash key ────────────────────────────────────────────────────────────
+function saveKey(id){
+  var val = $(id).value.trim();
+  if(!val){ alert('Key daalo pehle!'); return; }
+  lsSet('wb_uk', val);
+  updateKeyStatus(val);
+}
+function updateKeyStatus(val){
+  var el = $('uk-status'); if(!el) return;
+  if(val){ el.className = 'key-status key-ok'; el.textContent = '✅ Unsplash key saved!'; }
+  else { el.className = 'key-status'; el.textContent = ''; }
+}
+async function testUnsplash(){
+  var el = $('test-result');
+  el.textContent = 'Testing Unsplash...';
+  var uk = lsGet('wb_uk', '');
+  if(!uk){ el.innerHTML = '<span style="color:#ff6b6b;">⚠️ No Unsplash key saved</span>'; return; }
+  try{
+    var r = await fetch('https://api.unsplash.com/photos/random?query=nature&client_id=' + encodeURIComponent(uk));
+    var d = await r.json();
+    if(d.errors) el.innerHTML = '<span style="color:#ff6b6b;">❌ ' + esc(d.errors[0]) + '</span>';
+    else el.innerHTML = '<span style="color:#1D9E75;">✅ Unsplash Working!</span>';
+  }catch(e){ el.innerHTML = '<span style="color:#ff6b6b;">❌ ' + esc(e.message) + '</span>'; }
+}
+
+// ── Services parsing ───────────────────────────────────────────────────────
+function parseServices(str){
+  var seen = {}, out = [];
+  String(str || '').split(/[,\n;|]+/).forEach(function(s){
+    s = s.replace(/\s+/g, ' ').trim();
+    if(!s || s.length > 70) return;
+    var k = s.toLowerCase();
+    if(seen[k]) return; seen[k] = 1; out.push(s);
+  });
+  return out.slice(0, 8);
+}
+
+// ── Client photo upload (compressed in the browser) ────────────────────────
+var IMGS = {};      // fixed slots: hero1..3, about, logo  → data URL
+var SVCIMG = {};    // service name (lower-case) → data URL
+var GAL = [];       // gallery data URLs (max 12)
+
+function readAsDataURL(file){
+  return new Promise(function(res, rej){
+    var fr = new FileReader(); fr.onload = function(){ res(fr.result); }; fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+async function compressImage(file, maxW, png){
+  var src;
+  try{
+    var bmp = await createImageBitmap(file, {imageOrientation:'from-image'});
+    return drawScaled(bmp, bmp.width, bmp.height, maxW, png);
+  }catch(e){
+    src = await readAsDataURL(file);
+    return new Promise(function(res){
+      var im = new Image();
+      im.onload = function(){ res(drawScaled(im, im.naturalWidth, im.naturalHeight, maxW, png)); };
+      im.onerror = function(){ res(src); };
+      im.src = src;
+    });
+  }
+}
+function drawScaled(img, w0, h0, maxW, png){
+  var r = Math.min(1, maxW / w0), w = Math.max(1, Math.round(w0 * r)), h = Math.max(1, Math.round(h0 * r));
+  var c = document.createElement('canvas'); c.width = w; c.height = h;
+  var g = c.getContext('2d');
+  if(!png){ g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); }
+  g.drawImage(img, 0, 0, w, h);
+  return c.toDataURL(png ? 'image/png' : 'image/jpeg', 0.82);
+}
+
+function makeSlot(o){   // o: {label, icon, get, set, max, png}
+  var d = document.createElement('div'); d.className = 'img-slot'; d.title = o.label;
+  d.innerHTML = '<input type="file" accept="image/*"><span class="ico">' + o.icon + '</span><span class="lbl">' + esc(o.label) + '</span>';
+  var inp = d.querySelector('input');
+  var x = document.createElement('button'); x.type = 'button'; x.className = 'slot-x'; x.textContent = '×'; x.title = 'Hatao';
+  d.appendChild(x);
+  function paint(){
+    var u = o.get(); d.classList.toggle('filled', !!u);
+    var old = d.querySelector('img'); if(old) old.remove();
+    if(u){ var im = document.createElement('img'); im.src = u; d.insertBefore(im, x); }
+  }
+  inp.addEventListener('change', async function(){
+    if(!inp.files || !inp.files[0]) return;
+    try{ o.set(await compressImage(inp.files[0], o.max || 1600, !!o.png)); }catch(e){ alert('Photo load nahi hui: ' + e.message); }
+    inp.value = ''; paint();
+  });
+  x.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); o.set(null); paint(); });
+  paint();
+  return d;
+}
+function renderFixedSlots(){
+  var gh = $('grid-hero'); gh.innerHTML = '';
+  [['hero1','Hero 1','🏢'],['hero2','Hero 2','🏢'],['hero3','Hero 3','🏢']].forEach(function(s){
+    gh.appendChild(makeSlot({label:s[1], icon:s[2], get:function(){ return IMGS[s[0]]; }, set:function(u){ if(u) IMGS[s[0]] = u; else delete IMGS[s[0]]; }, max:1800}));
+  });
+  var gm = $('grid-misc'); gm.innerHTML = '';
+  gm.appendChild(makeSlot({label:'About', icon:'👤', get:function(){ return IMGS.about; }, set:function(u){ if(u) IMGS.about = u; else delete IMGS.about; }, max:1400}));
+  gm.appendChild(makeSlot({label:'Logo', icon:'🏷️', get:function(){ return IMGS.logo; }, set:function(u){ if(u) IMGS.logo = u; else delete IMGS.logo; }, max:500, png:true}));
+}
+function renderSvcSlots(){
+  var g = $('grid-svc'); g.innerHTML = '';
+  var names = parseServices($('svc').value);
+  if(!names.length){
+    g.innerHTML = '<div class="hint" style="grid-column:1/-1">Pehle upar "Key Services" me services likho — yahan har service ka photo-slot aa jayega.</div>';
+    return;
+  }
+  names.forEach(function(n){
+    var k = n.toLowerCase();
+    g.appendChild(makeSlot({label:n, icon:'⭐', get:function(){ return SVCIMG[k]; }, set:function(u){ if(u) SVCIMG[k] = u; else delete SVCIMG[k]; }, max:1100}));
+  });
+}
+function renderGallery(){
+  var g = $('grid-gal'); g.innerHTML = '';
+  GAL.forEach(function(u, i){
+    g.appendChild(makeSlot({label:'Gal ' + (i + 1), icon:'🖼️', get:function(){ return GAL[i]; }, set:function(v){ if(!v){ GAL.splice(i, 1); renderGallery(); } }, max:1400}));
+  });
+  if(GAL.length < 12){
+    var add = document.createElement('div'); add.className = 'gal-add';
+    add.innerHTML = '＋ Add<br>photos<input type="file" accept="image/*" multiple>';
+    add.querySelector('input').addEventListener('change', async function(e){
+      var files = Array.prototype.slice.call(e.target.files || []).slice(0, 12 - GAL.length);
+      for(var i = 0; i < files.length; i++){
+        try{ GAL.push(await compressImage(files[i], 1400, false)); }catch(err){}
+      }
+      renderGallery();
+    });
+    g.appendChild(add);
+  }
+}
+
+// ── UI helpers ──────────────────────────────────────────────────────────────
+function selC(el){ $('cr').querySelectorAll('.co').forEach(function(e){ e.classList.remove('sel'); }); el.classList.add('sel'); $('ct').value = el.dataset.v; }
+function chipVals(id){ return [].slice.call(document.querySelectorAll('#' + id + ' .feat.sel')).map(function(e){ return e.dataset.v; }); }
+function setProg(pct, title){
+  $('pbar').style.width = pct + '%'; $('ppct').textContent = Math.round(pct) + '%';
+  if(title) $('ptitle').textContent = title;
+}
+var stepSeq = 0;
+function addStep(msg, t){
+  var el = document.createElement('div');
+  el.className = 'step ' + (t || 'act'); el.textContent = '▸ ' + msg; el.id = 'st' + (++stepSeq);
+  $('steps').appendChild(el); el.scrollIntoView({block:'nearest'});
+  return el.id;
+}
+function doneStep(id, msg){ var el = $(id); if(el){ el.className = 'step done'; el.textContent = '✅ ' + (msg || el.textContent.replace(/^▸\s*/, '')); } }
+function errStep(id, m){ var el = $(id); if(el){ el.className = 'step err'; el.textContent = '⚠️ ' + (m || 'fallback use hua'); } }
+
+// ── Phone / reviews helpers ─────────────────────────────────────────────────
+function normPhone(raw){
+  var d = String(raw || '').replace(/[^0-9]/g, '');
+  if(!d) return '';
+  if(d.length === 10 && /^[6-9]/.test(d)) return '91' + d;
+  if(d.length === 11 && d[0] === '0') return '91' + d.slice(1);
+  if(d.length === 12 && d.indexOf('91') === 0) return d;
+  return d;
+}
+function parseReviews(text){
+  var out = [];
+  String(text || '').split(/\n\s*\n/).forEach(function(block){
+    var lines = block.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+    if(!lines.length) return;
+    var name = '', body;
+    if(lines.length > 1 && lines[0].length <= 40 && !/[.!?]$/.test(lines[0])){ name = lines[0]; body = lines.slice(1).join(' '); }
+    else body = lines.join(' ');
+    if(body.length > 8) out.push({name:name, text:body});
+  });
+  return out.slice(0, 6);
+}
+
+// ── Autofill (labelled text OR a raw Google Maps copy-paste) ───────────────
+function autofill(){
+  var raw = $('qp').value.trim(); if(!raw){ alert('Paste karo!'); return; }
+  var lines = raw.split(/\r?\n/).map(function(s){ return s.trim(); });
+  var ne = lines.filter(Boolean);
+  function lab(keys){
+    for(var i = 0; i < keys.length; i++){
+      var m = raw.match(new RegExp('^\\s*' + keys[i] + '\\s*[:\\-]\\s*(.+)$', 'im'));
+      if(m) return m[1].trim();
+    }
+    return '';
+  }
+  var bn = lab(['Business', 'Name']);
+  var loc = lab(['Location', 'Address', 'City', 'Area']);
+  var ph = lab(['Phone', 'Mobile', 'WhatsApp', 'Contact', 'Tel']);
+  var svc = lab(['Services', 'Service', 'Products', 'Treatments']);
+  var ext = lab(['About', 'Extra', 'Info', 'Experience', 'Note']);
+  var hrs = lab(['Hours', 'Timings']);
+  var rating = '', rvn = '', cat = '';
+
+  // Google Maps copy: first line = name, then "4.7", "(170)", category
+  var labelled = ne.length && /^[^:]{1,60}:\s*\S/.test(ne[0]);
+  if(!bn && ne.length && !labelled) bn = ne[0];
+  for(var i = 0; i < Math.min(ne.length, 10); i++){
+    if(!rating && /^[1-5](\.\d)?$/.test(ne[i])){
+      rating = ne[i];
+      if(ne[i + 1] && /^\(?[\d,]+\)?$/.test(ne[i + 1])){ rvn = ne[i + 1].replace(/[^\d]/g, ''); if(ne[i + 2] && ne[i + 2].length < 40) cat = ne[i + 2]; }
+      break;
+    }
+  }
+  if(!ph){ var pm = raw.match(/(\+?91[\s-]?)?\(?0?[6-9]\d{3,4}\)?[\s-]?\d{5,6}/); if(pm) ph = pm[0].trim(); }
+  if(!loc){
+    for(var j = 0; j < ne.length; j++){
+      if(ne[j].length > 14 && ne[j].length < 160 && /,/.test(ne[j]) && (/\b\d{6}\b/.test(ne[j]) || /(road|rd\b|marg|nagar|sector|block|floor|market|colony|enclave|vihar|delhi|mumbai|pune|noida|gurgaon|jaipur)/i.test(ne[j])) && !/^(reviews?|photos?)/i.test(ne[j])){ loc = ne[j].replace(/^[^A-Za-z0-9]+/, ''); break; }
+    }
+  }
+  if(!svc){
+    var STOP = /^(view all|directions|save|share|call|website|overview|reviews?|photos?|about|address|hours|menu|send to phone|add|suggest|claim|people also|popular times|write a review)/i;
+    var best = [];
+    for(var k = 0; k < lines.length; k++){
+      var prevL = ''; for(var q = k - 1; q >= 0; q--){ if(lines[q]){ prevL = lines[q]; break; } }
+      if(/^services?$/i.test(lines[k]) && !/^(photos?|reviews?|overview|about)$/i.test(prevL)){   // skip the tab-row "Services"
+        var cur = [];
+        for(var m2 = k + 1; m2 < lines.length; m2++){
+          var L = lines[m2];
+          if(!L){ if(cur.length) break; else continue; }
+          if(STOP.test(L) || L.length > 48) break;
+          if(/\d{3,}/.test(L) || (L.match(/,/g) || []).length > 1) continue;   // phone / address-like lines are not services
+          cur.push(L);
+        }
+        if(cur.length > best.length) best = cur;
+      }
+    }
+    if(best.length) svc = best.join(', ');
+  }
+  var low = (raw + ' ' + cat).toLowerCase();
+  var map = {'dental':'dental clinic','dentist':'dental clinic','salon':'salon beauty parlour','beauty parlour':'salon beauty parlour','beauty':'salon beauty parlour','restaurant':'restaurant cafe fine dining','cafe':'restaurant cafe fine dining','hotel':'hotel resort','resort':'hotel resort','gym':'gym fitness center','fitness':'gym fitness center','real estate':'luxury real estate agency','interior':'interior design studio','coaching':'education coaching institute','institute':'education coaching institute','spa':'medical spa aesthetic clinic','law':'law firm legal services','advocate':'law firm legal services','construction':'construction firm','travel':'travel agency','fashion':'fashion boutique','boutique':'fashion boutique','digital':'digital marketing agency','ecommerce':'ecommerce online store','photograph':'photography studio','chartered':'CA accounting firm','hospital':'hospital clinic','news':'news magazine','wellness':'wellness yoga center','yoga':'wellness yoga center'};
+  var sel = $('bt');
+  for(var key in map){
+    if(low.indexOf(key) > -1){
+      for(var oi = 0; oi < sel.options.length; oi++){ if(sel.options[oi].value === map[key]){ sel.value = map[key]; break; } }
+      break;
+    }
+  }
+  if(bn) $('bn').value = bn;
+  if(loc) $('loc').value = loc;
+  if(ph) $('wa').value = ph;
+  if(svc){ var sv = parseServices(svc); $('svc').value = sv.join(', '); renderSvcSlots(); }
+  if(ext) $('ext').value = ext;
+  if(hrs) $('hours').value = hrs;
+  if(rating) $('rating').value = rating;
+  if(rvn) $('rvn').value = rvn;
+  var btn = document.querySelector('.qbox .btn-gold'); btn.textContent = '✅ Done! Details check karo, phir Build'; btn.style.background = '#1D9E75';
+}
+
+// ── Unsplash (optional stock photos) ────────────────────────────────────────
+async function unsplash(q, key, n){
+  if(!key) return [];
+  try{
+    var r = await fetch('https://api.unsplash.com/photos/random?count=' + (n || 1) + '&orientation=landscape&query=' + encodeURIComponent(q) + '&client_id=' + encodeURIComponent(key));
+    var d = await r.json();
+    if(!Array.isArray(d)) d = d && d.urls ? [d] : [];
+    return d.map(function(x){ return x && x.urls && x.urls.regular; }).filter(Boolean);
+  }catch(e){ return []; }
+}
+
+// ── Init ────────────────────────────────────────────────────────────────────
+window.addEventListener('load', function(){
+  var uk = lsGet('wb_uk', '');
+  if(uk){ $('uk').value = uk; updateKeyStatus(uk); }
+  renderFixedSlots(); renderSvcSlots(); renderGallery();
+  var t = null;
+  $('svc').addEventListener('input', function(){ clearTimeout(t); t = setTimeout(renderSvcSlots, 350); });
+  ['sec-wrap', 'feat-wrap'].forEach(function(id){
+    $(id).addEventListener('click', function(e){ var f = e.target.closest('.feat'); if(f) f.classList.toggle('sel'); });
+  });
+  var m = lsGet('wb_mode', 'free'); $('mode').value = m; setMode(m, true);
+});
+
+var MODE = 'free';
+function setMode(m, init){
+  MODE = m === 'claude' ? 'claude' : 'free';
+  lsSet('wb_mode', MODE);
+  var cs = $('claude-setup'); if(cs) cs.style.display = MODE === 'claude' ? 'block' : 'none';
+  if(MODE === 'claude'){ checkAI(); }
+  else { AI_OK = null; setBadge('ok', '🆓 Free mode'); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Page kit — CSS + JS that every generated website receives
+// ═══════════════════════════════════════════════════════════════════════════
+var KIT_CSS = [
+'*{box-sizing:border-box;margin:0;padding:0}',
+'html{scroll-behavior:smooth}',
+'body{font-family:var(--fb);color:var(--td);background:#fff;overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased}',
+'h1,h2,h3,h4,h5{font-family:var(--fh);line-height:1.15}',
+'img{max-width:100%;display:block}',
+'a{text-decoration:none;color:inherit}',
+'ul{list-style:none}',
+'section[id]{scroll-margin-top:68px}',
+'.ctr{max-width:1200px;margin:0 auto;padding:0 24px}',
+'.btn-p,.btn-o,.btn-g{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 30px;border-radius:var(--rb);font-weight:700;font-size:15px;cursor:pointer;transition:all .3s;border:2px solid transparent;font-family:var(--fb);line-height:1.2}',
+'.btn-p{background:var(--p);color:#fff}',
+'.btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.22);color:#fff}',
+'.btn-o{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}',
+'.btn-o:hover{background:rgba(255,255,255,.14);border-color:#fff}',
+'.btn-g{background:transparent;color:var(--td);border-color:rgba(0,0,0,.22)}',
+'.btn-g:hover{border-color:var(--p);color:var(--p)}',
+'.sbadge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:var(--rb);background:color-mix(in srgb,var(--p) 13%,transparent);color:var(--p);margin-bottom:14px}',
+'details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-marker{display:none}',
+/* navigation */
+'#mainnav{--nfg:#fff;left:0;right:0;top:0;z-index:1000;padding:14px 0;transition:background .35s,box-shadow .35s,padding .35s}',
+'#mainnav.nav-fixed{position:fixed}#mainnav.nav-abs{position:absolute}',
+'#mainnav.nav-dark{background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,0))}',
+'#mainnav.nav-light{--nfg:var(--td)}',
+'#mainnav.scrolled{--nfg:var(--td);background:rgba(255,255,255,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 2px 22px rgba(0,0,0,.09);padding:10px 0}',
+'#mainnav .nb{font-family:var(--fh);font-size:22px;font-weight:800;color:var(--nfg);display:flex;align-items:center;gap:10px}',
+'#mainnav .nb img{height:42px;width:auto;max-width:170px;object-fit:contain}',
+'#mainnav .nl{color:var(--nfg);opacity:.92;font-size:14px;font-weight:500;transition:opacity .2s,color .2s}',
+'#mainnav .nl:hover{opacity:1;color:var(--p)}',
+'#navtog{display:none;background:none;border:1px solid color-mix(in srgb,var(--nfg) 40%,transparent);color:var(--nfg);border-radius:8px;padding:6px 11px;cursor:pointer;font-size:17px}',
+'#navmob{display:none;flex-direction:column;background:var(--bg);padding:8px 0;border-top:1px solid rgba(255,255,255,.1)}',
+'#navmob.open{display:flex}',
+'#navmob a{color:rgba(255,255,255,.88);font-size:15px;padding:12px 24px;border-bottom:1px solid rgba(255,255,255,.07)}',
+'@media(max-width:900px){#mainnav .nav-lnks{display:none!important}#navtog{display:block}}',
+/* slider */
+'.wb-slider{position:relative}',
+'.wb-viewport{overflow:hidden;border-radius:inherit}',
+'.wb-slider[data-mode="slide"] .wb-track{display:flex;gap:var(--wb-gap,20px);transition:transform .65s cubic-bezier(.22,.8,.3,1);will-change:transform;touch-action:pan-y}',
+'.wb-slider[data-mode="slide"] .wb-slide{flex:0 0 calc((100% - (var(--wb-pv,1) - 1) * var(--wb-gap,20px)) / var(--wb-pv,1));min-width:0}',
+'.wb-slider[data-mode="fade"] .wb-track{display:grid}',
+'.wb-slider[data-mode="fade"] .wb-slide{grid-area:1/1;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility .9s;min-width:0}',
+'.wb-slider[data-mode="fade"] .wb-slide.active,.wb-slider[data-mode="fade"]:not(.wb-init) .wb-slide:first-child{opacity:1;visibility:visible;z-index:1}',
+'.wb-arrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:none;background:rgba(255,255,255,.94);color:#1a1a2e;box-shadow:0 6px 20px rgba(0,0,0,.2);cursor:pointer;z-index:6;font-size:15px;line-height:1;transition:transform .2s,background .2s}',
+'.wb-arrow:hover{background:var(--p);color:#fff;transform:translateY(-50%) scale(1.08)}',
+'.wb-prev{left:10px}.wb-next{right:10px}',
+'.wb-dots{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:20px}',
+'.wb-slider[data-mode="fade"] .wb-dots{position:absolute;left:0;right:0;bottom:22px;margin:0;z-index:6}',
+'.wb-dot{width:9px;height:9px;border-radius:99px;border:none;background:rgba(120,130,150,.45);cursor:pointer;padding:0;transition:all .3s}',
+'.wb-slider[data-mode="fade"] .wb-dot{background:rgba(255,255,255,.5)}',
+'.wb-dot.on{width:28px;background:var(--p)}',
+'.wb-slider[data-mode="fade"] .wb-dot.on{background:#fff}',
+'@media(max-width:640px){.wb-arrow{width:38px;height:38px}.wb-prev{left:4px}.wb-next{right:4px}}',
+/* tabs */
+'.wb-panel{display:none}.wb-panel.active{display:block;animation:wbIn .45s ease}',
+'@keyframes wbIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}',
+/* lightbox */
+'.wb-lb{position:fixed;inset:0;background:rgba(5,8,15,.92);z-index:100000;display:none;align-items:center;justify-content:center;padding:24px}',
+'.wb-lb.open{display:flex}',
+'.wb-lb>img{max-width:min(94vw,1200px);max-height:88vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 80px rgba(0,0,0,.6)}',
+'.wb-lb button{position:absolute;background:rgba(255,255,255,.14);border:none;color:#fff;width:48px;height:48px;border-radius:50%;font-size:22px;cursor:pointer}',
+'.wb-lb button:hover{background:rgba(255,255,255,.28)}',
+'.wb-lb-x{top:18px;right:18px}.wb-lb-p{left:18px;top:50%;margin-top:-24px}.wb-lb-n{right:18px;top:50%;margin-top:-24px}',
+/* misc */
+'#spb{position:fixed;top:0;left:0;height:3px;background:var(--gr);z-index:9999;width:0;transition:width .1s}',
+'#btt{position:fixed;bottom:92px;right:22px;width:44px;height:44px;background:var(--p);color:#fff;border:none;border-radius:50%;font-size:16px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:998;box-shadow:0 4px 14px rgba(0,0,0,.25)}',
+'@keyframes wap{0%,100%{box-shadow:0 6px 20px rgba(37,211,102,.55)}50%{box-shadow:0 6px 30px rgba(37,211,102,.9),0 0 0 10px rgba(37,211,102,.12)}}',
+'@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}',
+'@media(max-width:768px){.ct-grid{grid-template-columns:1fr!important}.ft-grid{grid-template-columns:1fr 1fr!important}}',
+'@media(max-width:480px){.ft-grid{grid-template-columns:1fr!important}.ctr{padding:0 18px}}'
+].join('\n');
+
+// This function is serialised into every generated page (it must stay self-contained).
+function wbKit(o){
+  o = o || {};
+  function all(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+
+  // AOS safety: animations inside sliders/tabs would stay hidden, and without the AOS script nothing may stay hidden
+  all('.wb-slider [data-aos], .wb-tabs [data-aos]').forEach(function(e){ e.removeAttribute('data-aos'); });
+  if(window.AOS){ AOS.init({duration:750, once:true, offset:60, easing:'ease-out-cubic'}); }
+  else { all('[data-aos]').forEach(function(e){ e.removeAttribute('data-aos'); }); }
+
+  // sliders
+  all('.wb-slider').forEach(function(sl){
+    var mode = sl.getAttribute('data-mode') === 'fade' ? 'fade' : 'slide';
+    var pvDesk = Math.max(1, parseInt(sl.getAttribute('data-per-view') || '1', 10) || 1);
+    var gap = parseInt(sl.getAttribute('data-gap') || '20', 10) || 0;
+    var auto = parseInt(sl.getAttribute('data-autoplay') || '0', 10) || 0;
+    var vp = sl.querySelector('.wb-viewport'), track = sl.querySelector('.wb-track');
+    if(!vp || !track) return;
+    var slides = all('.wb-slide', track); if(!slides.length) return;
+    var idx = 0, pv = pvDesk, timer = null, dragged = false;
+    sl.style.setProperty('--wb-gap', gap + 'px');
+    sl.classList.add('wb-init');
+    var prev = document.createElement('button'), next = document.createElement('button'), dots = document.createElement('div');
+    prev.type = next.type = 'button';
+    prev.className = 'wb-arrow wb-prev'; next.className = 'wb-arrow wb-next'; dots.className = 'wb-dots';
+    prev.setAttribute('aria-label', 'Previous'); next.setAttribute('aria-label', 'Next');
+    prev.innerHTML = '&#10094;'; next.innerHTML = '&#10095;';
+    sl.appendChild(prev); sl.appendChild(next); sl.appendChild(dots);
+    function calc(){
+      var w = window.innerWidth;
+      pv = mode === 'fade' ? 1 : (w < 640 ? 1 : (w < 1024 ? Math.min(2, pvDesk) : pvDesk));
+      sl.style.setProperty('--wb-pv', pv);
+    }
+    function pages(){ return mode === 'fade' ? slides.length : Math.max(1, slides.length - pv + 1); }
+    function render(){
+      var n = pages(); if(idx >= n) idx = n - 1; if(idx < 0) idx = 0;
+      if(mode === 'fade'){ slides.forEach(function(s, i){ s.classList.toggle('active', i === idx); }); }
+      else { var w = slides[0].getBoundingClientRect().width; track.style.transform = 'translateX(-' + (idx * (w + gap)) + 'px)'; }
+      if(dots.children.length !== n){
+        dots.innerHTML = '';
+        for(var i = 0; i < n; i++){ (function(i){ var b = document.createElement('button'); b.type = 'button'; b.className = 'wb-dot'; b.setAttribute('aria-label', 'Slide ' + (i + 1)); b.addEventListener('click', function(){ go(i, true); }); dots.appendChild(b); })(i); }
+      }
+      all('.wb-dot', dots).forEach(function(b, i){ b.classList.toggle('on', i === idx); });
+      var show = n > 1 ? '' : 'none'; prev.style.display = show; next.style.display = show; dots.style.display = show;
+    }
+    function stop(){ if(timer){ clearInterval(timer); timer = null; } }
+    function restart(){ stop(); if(auto > 0 && pages() > 1) timer = setInterval(function(){ go(idx + 1); }, auto); }
+    function go(i, user){ var n = pages(); idx = ((i % n) + n) % n; render(); if(user) restart(); }
+    prev.addEventListener('click', function(){ go(idx - 1, true); });
+    next.addEventListener('click', function(){ go(idx + 1, true); });
+    sl.addEventListener('mouseenter', stop); sl.addEventListener('mouseleave', restart);
+    var sx = null;
+    vp.addEventListener('pointerdown', function(e){ sx = e.clientX; dragged = false; });
+    window.addEventListener('pointerup', function(e){
+      if(sx === null) return;
+      var dx = e.clientX - sx; sx = null;
+      if(Math.abs(dx) > 45){ dragged = true; go(idx + (dx < 0 ? 1 : -1), true); }
+    });
+    vp.addEventListener('click', function(e){ if(dragged){ e.preventDefault(); e.stopPropagation(); dragged = false; } }, true);
+    vp.addEventListener('dragstart', function(e){ e.preventDefault(); });
+    window.addEventListener('resize', function(){ calc(); render(); });
+    window.addEventListener('load', function(){ calc(); render(); });
+    calc(); render(); restart();
+  });
+
+  // tabs
+  all('.wb-tabs').forEach(function(t){
+    var tabs = all('.wb-tab', t), panels = all('.wb-panel', t);
+    function show(i){ tabs.forEach(function(x, j){ x.classList.toggle('active', i === j); }); panels.forEach(function(x, j){ x.classList.toggle('active', i === j); }); }
+    tabs.forEach(function(x, i){ x.addEventListener('click', function(){ show(i); }); });
+    show(Math.max(0, tabs.findIndex ? tabs.findIndex(function(x){ return x.classList.contains('active'); }) : 0));
+  });
+
+  // lightbox
+  var lbImgs = all('img[data-lightbox]');
+  if(lbImgs.length){
+    var ov = document.createElement('div'); ov.className = 'wb-lb';
+    ov.innerHTML = '<button type="button" class="wb-lb-x" aria-label="Close">&times;</button><button type="button" class="wb-lb-p" aria-label="Previous">&#10094;</button><img alt=""><button type="button" class="wb-lb-n" aria-label="Next">&#10095;</button>';
+    document.body.appendChild(ov);
+    var big = ov.querySelector('img'), cur = 0;
+    var showLb = function(i){ cur = (i + lbImgs.length) % lbImgs.length; big.src = lbImgs[cur].currentSrc || lbImgs[cur].src; big.alt = lbImgs[cur].alt || ''; ov.classList.add('open'); };
+    var hideLb = function(){ ov.classList.remove('open'); };
+    lbImgs.forEach(function(im, i){ im.style.cursor = 'zoom-in'; im.addEventListener('click', function(){ showLb(i); }); });
+    ov.addEventListener('click', function(e){ if(e.target === ov || (e.target.className && e.target.className.indexOf('wb-lb-x') > -1)) hideLb(); });
+    ov.querySelector('.wb-lb-p').addEventListener('click', function(e){ e.stopPropagation(); showLb(cur - 1); });
+    ov.querySelector('.wb-lb-n').addEventListener('click', function(e){ e.stopPropagation(); showLb(cur + 1); });
+    document.addEventListener('keydown', function(e){
+      if(!ov.classList.contains('open')) return;
+      if(e.key === 'Escape') hideLb(); if(e.key === 'ArrowLeft') showLb(cur - 1); if(e.key === 'ArrowRight') showLb(cur + 1);
+    });
+  }
+
+  // count-up
+  if(o.counters){
+    all('[data-count]').forEach(function(el){
+      var m = el.textContent.trim().match(/^(\D*)([\d.,]+)(.*)$/); if(!m) return;
+      var num = parseFloat(m[2].replace(/,/g, '')); if(!isFinite(num)) return;
+      var dec = (m[2].split('.')[1] || '').length;
+      if(!('IntersectionObserver' in window)) return;
+      var io = new IntersectionObserver(function(en){
+        if(!en[0].isIntersecting) return; io.disconnect();
+        var t0 = null;
+        (function step(t){
+          if(!t0) t0 = t; var k = Math.min(1, (t - t0) / 1400), v = num * (1 - Math.pow(1 - k, 3));
+          el.textContent = m[1] + v.toLocaleString('en-IN', {minimumFractionDigits:dec, maximumFractionDigits:dec}) + m[3];
+          if(k < 1) requestAnimationFrame(step);
+        })(performance.now());
+      }, {threshold:.5});
+      io.observe(el);
+    });
+  }
+
+  // nav, progress bar, back-to-top, mobile menu
+  var nav = document.getElementById('mainnav'), spb = document.getElementById('spb'), btt = document.getElementById('btt');
+  function onScroll(){
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    if(nav && nav.classList.contains('nav-fixed')){ if(y > 60) nav.classList.add('scrolled'); else nav.classList.remove('scrolled'); }
+    if(spb){ var mh = document.body.scrollHeight - window.innerHeight; spb.style.width = (mh > 0 ? Math.round(y / mh * 100) : 0) + '%'; }
+    if(btt) btt.style.display = y > 320 ? 'flex' : 'none';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  if(btt) btt.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  var tog = document.getElementById('navtog'), mob = document.getElementById('navmob');
+  if(tog && mob){
+    tog.addEventListener('click', function(){ mob.classList.toggle('open'); });
+    all('a', mob).forEach(function(a){ a.addEventListener('click', function(){ mob.classList.remove('open'); }); });
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  FREE mode — industry content + local design brief (no API needed)
+// ═══════════════════════════════════════════════════════════════════════════
+var FONT_PAIRS = [
+  {id:'playfair-inter', head:'Playfair Display', body:'Inter', hs:'Georgia,serif', bs:'system-ui,sans-serif', q:'family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700', tags:['luxury','trust','classic','editorial']},
+  {id:'cormorant-jost', head:'Cormorant Garamond', body:'Jost', hs:'Georgia,serif', bs:'system-ui,sans-serif', q:'family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500;600', tags:['luxury','calm','editorial']},
+  {id:'dmserif-dmsans', head:'DM Serif Display', body:'DM Sans', hs:'Georgia,serif', bs:'system-ui,sans-serif', q:'family=DM+Serif+Display&family=DM+Sans:wght@400;500;700', tags:['warm','editorial','friendly','luxury']},
+  {id:'poppins-inter', head:'Poppins', body:'Inter', hs:'system-ui,sans-serif', bs:'system-ui,sans-serif', q:'family=Poppins:wght@500;600;700;800&family=Inter:wght@300;400;500;600', tags:['friendly','clean','trust','energy']},
+  {id:'spacegrotesk-inter', head:'Space Grotesk', body:'Inter', hs:'system-ui,sans-serif', bs:'system-ui,sans-serif', q:'family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600', tags:['tech','bold','clean']},
+  {id:'syne-manrope', head:'Syne', body:'Manrope', hs:'system-ui,sans-serif', bs:'system-ui,sans-serif', q:'family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700', tags:['bold','editorial','tech']},
+  {id:'fraunces-worksans', head:'Fraunces', body:'Work Sans', hs:'Georgia,serif', bs:'system-ui,sans-serif', q:'family=Fraunces:wght@400;600;700;900&family=Work+Sans:wght@400;500;600', tags:['warm','calm','friendly','editorial']},
+  {id:'montserrat-opensans', head:'Montserrat', body:'Open Sans', hs:'system-ui,sans-serif', bs:'system-ui,sans-serif', q:'family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600', tags:['trust','clean','bold','classic']},
+  {id:'bebas-barlow', head:'Bebas Neue', body:'Barlow', hs:'Impact,sans-serif', bs:'system-ui,sans-serif', q:'family=Bebas+Neue&family=Barlow:wght@400;500;600;700', tags:['bold','energy']},
+  {id:'lora-nunito', head:'Lora', body:'Nunito Sans', hs:'Georgia,serif', bs:'system-ui,sans-serif', q:'family=Lora:wght@500;600;700&family=Nunito+Sans:wght@400;600;700', tags:['trust','friendly','calm','classic']},
+  {id:'outfit-jakarta', head:'Outfit', body:'Plus Jakarta Sans', hs:'system-ui,sans-serif', bs:'system-ui,sans-serif', q:'family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700', tags:['clean','friendly','tech','energy']},
+  {id:'marcellus-lato', head:'Marcellus', body:'Lato', hs:'Georgia,serif', bs:'system-ui,sans-serif', q:'family=Marcellus&family=Lato:wght@400;700', tags:['classic','luxury','trust']},
+  {id:'baskerville-source', head:'Libre Baskerville', body:'Source Sans 3', hs:'Georgia,serif', bs:'system-ui,sans-serif', q:'family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@400;600', tags:['editorial','classic','trust']}
+];
+var RADII = [
+  {id:'soft', card:'22px', btn:'999px', img:'22px'},
+  {id:'medium', card:'14px', btn:'12px', img:'14px'},
+  {id:'sharp', card:'4px', btn:'4px', img:'2px'},
+  {id:'pill', card:'32px', btn:'999px', img:'32px'},
+  {id:'editorial', card:'0px', btn:'0px', img:'0px'}
+];
+var STYLE_PREFS = {luxury:['luxury','editorial'], clean:['clean','trust'], bold:['bold','energy','tech'], warm:['warm','friendly'], editorial:['editorial','classic']};
+
+// Industries. noun = what visitors are called; defaults = typical services used ONLY if the owner gave none.
+var IND = [
+  {k:'dental', match:['dental'], tags:['clean','trust','friendly'], svc:'Treatments', cta:'Book an appointment', pill:'Dental care', noun:'patient',
+   icons:['fa-tooth','fa-face-smile','fa-teeth','fa-shield-heart','fa-stethoscope','fa-calendar-check'],
+   heads:['Healthy smiles, gentle care','Your smile deserves expert attention','Smile with confidence'],
+   chips:['Appointments on WhatsApp','Clear advice before treatment','Easy to reach'],
+   steps:[['Book','Send us a WhatsApp message to choose a convenient time.'],['Check-up','The dentist examines and explains what is needed.'],['Treatment','Treatment is planned and carried out step by step.'],['Follow-up','We guide you on aftercare and your next visit.']],
+   faq:[['Will the treatment hurt?','Your dentist will explain the procedure and comfort options before starting. Message us with any concern.'],['Can I bring my child?','Message us on WhatsApp and we will guide you on the right appointment.']],
+   desc:['{s}, explained clearly at every step.','Care that focuses on your comfort: {s}.','Ask us about {s} and what suits you best.'],
+   defaults:['Check-up & Cleaning','Fillings','Root Canal','Braces & Aligners','Teeth Whitening','Dental Implants']},
+  {k:'spa', match:['spa','aesthetic'], tags:['luxury','calm'], svc:'Treatments', cta:'Book a session', pill:'Spa & aesthetics', noun:'guest',
+   icons:['fa-spa','fa-leaf','fa-hand-sparkles','fa-droplet','fa-heart','fa-sun'],
+   heads:['Relax. Renew. Glow.','A calm space to restore yourself','Treatments designed around you'],
+   chips:['Book on WhatsApp','Treatments explained first','Find us easily'],
+   steps:[['Book','Message us the treatment and time you prefer.'],['Consultation','We discuss your needs and suggest options.'],['Treatment','Relax while the treatment is carried out.'],['Aftercare','You receive simple guidance for after your visit.']],
+   faq:[['How do I choose a treatment?','Tell us your concern on WhatsApp and the team will suggest suitable options.'],['Do I need to book in advance?','Booking ahead on WhatsApp helps us keep a slot ready for you.']],
+   desc:['{s}, tailored to what you need.','Unwind with {s}.','Ask us whether {s} is right for you.'],
+   defaults:['Facials','Body Massage','Skin Treatments','Hair & Scalp Care','Manicure & Pedicure','Relaxation Therapies']},
+  {k:'wellness', match:['wellness','yoga'], tags:['calm','warm'], svc:'Programs & Classes', cta:'Join a class', pill:'Wellness & yoga', noun:'member',
+   icons:['fa-om','fa-leaf','fa-heart-pulse','fa-sun','fa-seedling','fa-dumbbell'],
+   heads:['Move, breathe, feel better','Find your balance','A calmer you starts here'],
+   chips:['Join via WhatsApp','Beginner questions welcome','Classes near you'],
+   steps:[['Enquire','Message us about the class you are interested in.'],['Choose','Pick the class or program that suits you.'],['Join','Come along and settle in at your own pace.'],['Keep going','Stay consistent with regular sessions.']],
+   faq:[['Is it suitable for beginners?','Message us your experience level and we will suggest the right class.'],['What should I bring?','Comfortable clothing and a water bottle. Ask us on WhatsApp for class details.']],
+   desc:['{s} to help you feel your best.','Join us for {s}.','Ask about {s} and class timings.'],
+   defaults:['Yoga Classes','Meditation','Breathwork','Fitness Sessions','Wellness Workshops','Personal Guidance']},
+  {k:'realestate', match:['real estate'], tags:['luxury','clean','trust'], svc:'Our Services', cta:'Schedule a visit', pill:'Real estate', noun:'client',
+   icons:['fa-house','fa-building','fa-key','fa-map-location-dot','fa-file-contract','fa-handshake'],
+   heads:['Find the place you will call home','Property, made simple','Your next address, handled with care'],
+   chips:['Enquire on WhatsApp','Site visits arranged','Local area knowledge'],
+   steps:[['Tell us','Share what you are looking for and your budget.'],['Shortlist','We suggest options that match.'],['Site visit','Visit the properties that interest you.'],['Paperwork','We help you through the next steps.']],
+   faq:[['How do I arrange a site visit?','Message us on WhatsApp with the property or area you are interested in.'],['Do you help with documentation?','Ask us about the support available for your case.']],
+   desc:['Help with {s}, step by step.','{s} handled with attention to detail.','Talk to us about {s}.'],
+   defaults:['Buying Property','Selling Property','Rentals','Property Management','Site Visits','Documentation Support']},
+  {k:'restaurant', match:['restaurant','cafe'], tags:['warm','luxury'], svc:'Menu Highlights', cta:'Reserve a table', pill:'Restaurant & cafe', noun:'guest',
+   icons:['fa-utensils','fa-mug-hot','fa-pizza-slice','fa-burger','fa-ice-cream','fa-wine-glass'],
+   heads:['Good food, good company','Come hungry, leave happy','Flavours worth coming back for'],
+   chips:['Reserve on WhatsApp','Dine in or call ahead','Find us easily'],
+   steps:[['Choose','Look through the menu and pick your favourites.'],['Reserve','Message us the date, time and number of guests.'],['Dine','Sit back and enjoy your meal.'],['Share','Tell your friends and come again.']],
+   faq:[['Can I reserve a table?','Message us on WhatsApp with your date, time and number of guests.'],['Do you offer takeaway or delivery?','Please message us to confirm the current options.']],
+   desc:['Our take on {s}.','Order {s} or ask us for a recommendation.','{s}, made to be shared.'],
+   defaults:['Starters','Main Course','Breads & Rice','Desserts','Beverages','Chef Specials']},
+  {k:'law', match:['law'], tags:['trust','classic'], svc:'Practice Areas', cta:'Contact', pill:'Advocate', noun:'client',
+   icons:['fa-scale-balanced','fa-gavel','fa-file-lines','fa-landmark','fa-building-columns','fa-user-tie'],
+   heads:['Advocate','Legal practice','Law chambers'],
+   chips:[],
+   steps:[],
+   faq:[],
+   desc:['Matters relating to {s}.','{s}.','Practice in {s}.'],
+   defaults:['Civil Matters','Criminal Matters','Family Matters','Property Matters','Corporate & Commercial','Consumer Matters']},
+  {k:'gym', match:['gym','fitness'], tags:['bold','energy'], svc:'Programs', cta:'Join now', pill:'Gym & fitness', noun:'member',
+   icons:['fa-dumbbell','fa-person-running','fa-heart-pulse','fa-bolt','fa-fire','fa-stopwatch'],
+   heads:['Train harder. Live stronger.','Build the strongest version of you','Your fitness journey starts today'],
+   chips:['Enquire on WhatsApp','Programs for every level','Find us easily'],
+   steps:[['Enquire','Message us your goals and questions.'],['Visit','Come and see the gym and meet the team.'],['Choose a plan','Pick the program that fits your routine.'],['Start training','Begin with guidance and build up steadily.']],
+   faq:[['I am a beginner, can I join?','Message us your goals and the team will guide you on where to start.'],['Do you have trainers?','Ask us on WhatsApp about trainer support and programs.']],
+   desc:['{s} to move you closer to your goals.','Join in for {s}.','Ask us about {s} and timings.'],
+   defaults:['Strength Training','Cardio','Personal Training','Group Classes','Weight Management','Yoga & Mobility']},
+  {k:'education', match:['education','coaching'], tags:['friendly','clean','trust'], svc:'Courses', cta:'Enquire now', pill:'Learning', noun:'student',
+   icons:['fa-graduation-cap','fa-book-open','fa-chalkboard-user','fa-pen-ruler','fa-laptop-code','fa-trophy'],
+   heads:['Learn with focus, grow with confidence','Guidance that helps you move ahead','Where learning gets personal'],
+   chips:['Enquire on WhatsApp','Batch details on request','Guidance from teachers'],
+   steps:[['Enquire','Message us about the course you are interested in.'],['Counselling','We explain the course and answer your questions.'],['Enrol','Choose your batch and complete enrolment.'],['Learn','Attend classes and keep progressing.']],
+   faq:[['How do I enrol?','Message us on WhatsApp and we will share the next steps and batch details.'],['Can I ask about batch timings?','Yes, message us and we will confirm the current batches.']],
+   desc:['{s}, taught with attention to each learner.','Join our {s}.','Ask us for details about {s}.'],
+   defaults:['School Subjects','Competitive Exams','Spoken English','Computer Skills','Doubt Classes','Career Guidance']},
+  {k:'ecommerce', match:['ecommerce'], tags:['clean','bold'], svc:'Shop Categories', cta:'Shop now', pill:'Online store', noun:'customer',
+   icons:['fa-bag-shopping','fa-tag','fa-truck-fast','fa-gift','fa-star','fa-shield-halved'],
+   heads:['Shop what you love','Discover something new today','Browse, pick, enjoy'],
+   chips:['Order on WhatsApp','New picks to explore','Ask us anything'],
+   steps:[['Browse','Look through the categories you like.'],['Order','Message us the items you want.'],['Pay','We share the payment details.'],['Receive','Your order is shipped to you.']],
+   faq:[['How do I place an order?','Message us on WhatsApp with the items you like.'],['Do you deliver to my area?','Share your location and we will confirm.']],
+   desc:['Explore our {s}.','Browse {s} and ask for help choosing.','{s}, picked with care.'],
+   defaults:['New Arrivals','Best Sellers','Gifts','Accessories','Home & Living','Offers & Bundles']},
+  {k:'interior', match:['interior'], tags:['editorial','luxury','warm'], svc:'Our Services', cta:'Book a design consultation', pill:'Interior design', noun:'client',
+   icons:['fa-couch','fa-ruler-combined','fa-paint-roller','fa-lightbulb','fa-house-chimney','fa-compass-drafting'],
+   heads:['Spaces that feel like you','Design that fits the way you live','Beautiful, functional interiors'],
+   chips:['Share your space on WhatsApp','Concept to completion','Local projects'],
+   steps:[['Brief','Tell us about your space and what you need.'],['Concept','We develop ideas and layouts for you.'],['Execution','The design is brought to life on site.'],['Handover','You walk into a finished space.']],
+   faq:[['How do we start a project?','Message us a few details and photos of your space.'],['Do you work on small spaces?','Tell us the space and your requirement, and we will guide you.']],
+   desc:['{s}, planned around how you live.','Ask us about {s}.','Thoughtful {s} for your space.'],
+   defaults:['Home Interiors','Modular Kitchens','Wardrobes','Living Room Design','Office Interiors','Renovation']},
+  {k:'photography', match:['photograph'], tags:['editorial','bold'], svc:'Packages', cta:'Check availability', pill:'Photography', noun:'client',
+   icons:['fa-camera','fa-camera-retro','fa-image','fa-film','fa-heart','fa-wand-magic-sparkles'],
+   heads:['Moments worth keeping','Stories told through light','Photographs you will treasure'],
+   chips:['Check dates on WhatsApp','Weddings, portraits & more','Local shoots'],
+   steps:[['Enquire','Message us your date and the kind of shoot.'],['Plan','We discuss locations, timing and ideas.'],['Shoot','Relax while we capture the moments.'],['Deliver','Edited photos are shared with you.']],
+   faq:[['How do I check availability?','Message us your date and event type.'],['When do I receive the photos?','Delivery time depends on the shoot; we will confirm when you book.']],
+   desc:['{s}, shot with care.','Ask us about {s}.','Capturing your {s}.'],
+   defaults:['Wedding Photography','Portraits','Pre-wedding Shoots','Events','Product Shoots','Albums']},
+  {k:'travel', match:['travel'], tags:['warm','energy'], svc:'Popular Packages', cta:'Plan my trip', pill:'Travel', noun:'traveller',
+   icons:['fa-plane','fa-umbrella-beach','fa-mountain-sun','fa-map-location-dot','fa-suitcase-rolling','fa-hotel'],
+   heads:['Pack your bags, we will plan the rest','Journeys made easy','Travel that fits you'],
+   chips:['Plan on WhatsApp','Custom itineraries','Support before you go'],
+   steps:[['Tell us','Share your destination, dates and group size.'],['Plan','We suggest an itinerary and options.'],['Book','Confirm the plan and bookings.'],['Travel','Enjoy the trip with our support.']],
+   faq:[['How do I plan a trip with you?','Message us your destination, dates and group size.'],['Can you customise a package?','Share your preferences and we will suggest options.']],
+   desc:['{s}, planned around you.','Ask us about {s}.','Explore {s}.'],
+   defaults:['Domestic Tours','International Tours','Honeymoon Packages','Family Holidays','Flight & Hotel Booking','Visa Guidance']},
+  {k:'hospital', match:['hospital'], tags:['trust','clean'], svc:'Departments & Services', cta:'Book an appointment', pill:'Healthcare', noun:'patient',
+   icons:['fa-hospital','fa-stethoscope','fa-user-doctor','fa-heart-pulse','fa-syringe','fa-truck-medical'],
+   heads:['Caring for you and your family','Care, close to home','Your health, our focus'],
+   chips:['Appointments by phone or WhatsApp','Clear guidance','Easy to reach'],
+   steps:[['Contact','Call or message us with the department you need.'],['Appointment','We confirm a convenient time.'],['Consultation','Meet the doctor and discuss your concern.'],['Follow-up','Get guidance on next steps.']],
+   faq:[['How do I book an appointment?','Message or call us with the department and a convenient time.'],['What should I carry?','Carry earlier reports and prescriptions. Ask us if you are unsure.']],
+   desc:['{s}, with clear guidance.','Enquire about {s}.','{s} and related care.'],
+   defaults:['General Consultation','Diagnostics','Specialist Care','Emergency Contact','Health Check-ups','Pharmacy']},
+  {k:'ca', match:['accounting','ca '], tags:['trust','classic'], svc:'Our Services', cta:'Talk to an expert', pill:'Accounting & tax', noun:'client',
+   icons:['fa-calculator','fa-file-invoice','fa-chart-line','fa-landmark','fa-briefcase','fa-receipt'],
+   heads:['Clear numbers, calm mind','Accounts and tax, handled','Financial guidance you can follow'],
+   chips:['Enquire on WhatsApp','Document checklists','Local office'],
+   steps:[['Connect','Message us what you need help with.'],['Share documents','We share a checklist of what is required.'],['We prepare','Your accounts or filings are prepared.'],['File & follow up','We file and keep you updated.']],
+   faq:[['What documents are needed?','It depends on the service. Message us and we will share a checklist.'],['How do I get started?','Message us on WhatsApp with the service you need.']],
+   desc:['Support with {s}.','{s}, handled in an organised way.','Ask us about {s}.'],
+   defaults:['GST Registration & Returns','Income Tax Filing','Bookkeeping','Company Registration','Audit Support','Tax Planning']},
+  {k:'news', match:['news','magazine'], tags:['editorial','classic'], svc:'Sections', cta:'Contact us', pill:'News & media', noun:'reader',
+   icons:['fa-newspaper','fa-bullhorn','fa-microphone','fa-video','fa-globe','fa-pen-nib'],
+   heads:['Stories that matter','Know what is happening','News, explained clearly'],
+   chips:['Reach the desk on WhatsApp','Local & national','Share a story'],
+   steps:[['Read','Browse the sections you care about.'],['Follow','Stay connected through our channels.'],['Share','Pass on stories worth sharing.'],['Contribute','Send us a tip or a story idea.']],
+   faq:[['How can I contact the newsroom?','Use the WhatsApp or phone details in the contact section.'],['How do I share a story?','Message us the details with any photos.']],
+   desc:['Coverage of {s}.','{s}, reported clearly.','Stay updated on {s}.'],
+   defaults:['Local News','National','Business','Sports','Entertainment','Opinion']},
+  {k:'fashion', match:['fashion'], tags:['editorial','luxury','bold'], svc:'Collections', cta:'Visit the boutique', pill:'Fashion', noun:'customer',
+   icons:['fa-shirt','fa-gem','fa-bag-shopping','fa-vest','fa-ring','fa-wand-magic-sparkles'],
+   heads:['Style that speaks for you','New looks, your way','Wear your story'],
+   chips:['Browse on WhatsApp','Fresh collections','Visit the store'],
+   steps:[['Browse','Look through the collections.'],['Choose','Pick the pieces you love.'],['Fit','Visit or share your size for the right fit.'],['Enjoy','Wear it with confidence.']],
+   faq:[['Can I see more designs?','Message us on WhatsApp and we will share what is available.'],['Do you do custom orders?','Ask us on WhatsApp about custom requests.']],
+   desc:['Explore our {s}.','{s}, styled for you.','Ask us about {s}.'],
+   defaults:['Ethnic Wear','Western Wear','Bridal Collection','Festive Collection','Accessories','Custom Tailoring']},
+  {k:'digital', match:['digital marketing'], tags:['bold','tech'], svc:'Services', cta:'Book a strategy call', pill:'Digital marketing', noun:'client',
+   icons:['fa-bullhorn','fa-chart-line','fa-magnifying-glass-chart','fa-hashtag','fa-laptop','fa-bullseye'],
+   heads:['Grow your brand online','Marketing built around your goals','Be seen where it matters'],
+   chips:['Book a call on WhatsApp','Strategy to execution','Clear reporting'],
+   steps:[['Discovery','We learn about your business and goals.'],['Strategy','We plan channels, content and budget.'],['Execute','We run the campaigns and content.'],['Review','We review performance and improve.']],
+   faq:[['How do we begin?','Message us on WhatsApp and tell us your goals.'],['Do you work with small businesses?','Share your business and budget range and we will discuss options.']],
+   desc:['{s}, planned around your goals.','Ask us about {s}.','{s} that supports your business.'],
+   defaults:['Social Media Management','SEO','Google Ads','Content Creation','Website Design','Branding']},
+  {k:'hotel', match:['hotel','resort'], tags:['luxury','warm'], svc:'Rooms & Experiences', cta:'Check availability', pill:'Hotel & resort', noun:'guest',
+   icons:['fa-hotel','fa-bed','fa-utensils','fa-person-swimming','fa-mountain-sun','fa-bell-concierge'],
+   heads:['Stay, relax, repeat','Comfort that feels like home','Your getaway awaits'],
+   chips:['Enquire on WhatsApp','Rooms & experiences','Easy to find'],
+   steps:[['Enquire','Message us your dates and number of guests.'],['Choose','Pick the room or package you like.'],['Confirm','We confirm your booking.'],['Arrive','Check in and enjoy your stay.']],
+   faq:[['How do I check availability?','Message us your dates and number of guests.'],['Do you offer meals?','Please message us to confirm what is included.']],
+   desc:['{s}, for a comfortable stay.','Ask us about {s}.','Enjoy {s}.'],
+   defaults:['Deluxe Rooms','Suites','Restaurant','Banquet & Events','Leisure Activities','Airport Pickup']},
+  {k:'salon', match:['salon','beauty','parlour'], tags:['luxury','friendly'], svc:'Our Services', cta:'Book your slot', pill:'Salon & beauty', noun:'guest',
+   icons:['fa-scissors','fa-spa','fa-hand-sparkles','fa-wand-magic-sparkles','fa-gem','fa-heart'],
+   heads:['Look good, feel amazing','Your style, perfected','Beauty, your way'],
+   chips:['Book on WhatsApp','Services for every occasion','Find us easily'],
+   steps:[['Book','Message us the service and time you prefer.'],['Consult','Tell us the look you want.'],['Pamper','Relax while we take care of you.'],['Glow','Step out feeling your best.']],
+   faq:[['How do I book a slot?','Message us the service and time you prefer.'],['Do you do bridal services?','Please check the services above or message us for details.']],
+   desc:['{s}, done your way.','Ask us about {s}.','Treat yourself to {s}.'],
+   defaults:['Haircut & Styling','Hair Colour','Facials','Bridal Makeup','Manicure & Pedicure','Waxing & Threading']},
+  {k:'construction', match:['construction'], tags:['bold','trust'], svc:'What We Build', cta:'Request a quote', pill:'Construction', noun:'client',
+   icons:['fa-helmet-safety','fa-hammer','fa-trowel-bricks','fa-ruler-combined','fa-building','fa-screwdriver-wrench'],
+   heads:['Built with care','Strong foundations, clear plans','Your project, built right'],
+   chips:['Share your project on WhatsApp','Plan to handover','Local work'],
+   steps:[['Discuss','Tell us about your project and location.'],['Plan & quote','We prepare the plan and an estimate.'],['Build','Work proceeds with regular updates.'],['Handover','You receive the finished project.']],
+   faq:[['How do I get a quote?','Message us your project details and location.'],['Do you take small jobs?','Tell us the scope and we will let you know.']],
+   desc:['{s}, planned and built with care.','Ask us about {s}.','{s} for homes and businesses.'],
+   defaults:['House Construction','Renovation','Commercial Buildings','Interior Finishing','Plumbing & Electrical','Project Planning']}
+];
+var IND_DEFAULT = {k:'generic', tags:['clean','trust','friendly'], svc:'Our Services', cta:'Get in touch', pill:'Local business', noun:'customer',
+  icons:['fa-star','fa-heart','fa-gem','fa-shield-heart','fa-award','fa-circle-check'],
+  heads:['Welcome to ' + '{bn}','Quality you can count on','We are here to help'], chips:['Message us on WhatsApp','Friendly guidance','Easy to reach'],
+  steps:[['Contact','Message us about what you need.'],['Discuss','We understand your requirement.'],['Get started','We begin the work.'],['Follow-up','We stay in touch after.']],
+  faq:[['How do I get started?','Message us on WhatsApp.'],['Can I visit?','Yes, please message us to confirm a good time.']],
+  desc:['{s}, with clear guidance.','Ask us about {s}.','Learn more about {s}.'],
+  defaults:['Service 1','Service 2','Service 3','Service 4','Service 5','Service 6']};
+
+function indFor(bt){
+  var low = (bt || '').toLowerCase() + ' ';
+  for(var i = 0; i < IND.length; i++){
+    for(var j = 0; j < IND[i].match.length; j++){ if(low.indexOf(IND[i].match[j]) > -1) return IND[i]; }
+  }
+  return IND_DEFAULT;
+}
+
+// ── seeded random + recipe picking (mirror of the Python design engine) ─────
+function rng(seed){ var a = seed >>> 0; return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function wpick(r, items, weights){
+  var tot = weights.reduce(function(a, b){ return a + b; }, 0);
+  if(tot <= 0) return items[Math.floor(r() * items.length)];
+  var x = r() * tot;
+  for(var i = 0; i < items.length; i++){ x -= weights[i]; if(x <= 0) return items[i]; }
+  return items[items.length - 1];
+}
+function overlap(a, b){ var n = 0; a.forEach(function(x){ if(b.indexOf(x) > -1) n++; }); return n; }
+var MOTIFS = ['hairline rules and small-caps labels', 'soft blobs and rounded shapes', 'bold blocks and offset shadows', 'oversized editorial type', 'glass panels and glows', 'paper-like fine borders', 'arches and circles', 'diagonal cuts and accent stripes'];
+
+function localBrief(o){   // o: {seed, bt, style_pref, avoid, img_counts, sections}
+  var r = rng(o.seed), ind = indFor(o.bt), avoid = o.avoid || [];
+  var pref = []; String(o.style_pref || '').split(',').forEach(function(k){ (STYLE_PREFS[k.trim()] || []).forEach(function(t){ pref.push(t); }); });
+  var wf = FONT_PAIRS.map(function(f){ var w = 1 + overlap(f.tags, ind.tags) + 3 * overlap(f.tags, pref); if(avoid.indexOf('font:' + f.id) > -1) w *= 0.08; return w; });
+  var font = wpick(r, FONT_PAIRS, wf);
+  var radius = wpick(r, RADII, RADII.map(function(x){ return avoid.indexOf('radius:' + x.id) > -1 ? 0.08 : 1; }));
+  var mi = Math.floor(r() * MOTIFS.length);
+  var counts = o.img_counts || {}, KIND = {hero:'hero', services:'svc', about:'about', gallery:'gal'};
+  function pick(sec){
+    var cnt = counts[KIND[sec]] || 0, list = TPL[sec], c = [], w = [];
+    list.forEach(function(t){
+      if(t.img === 'req' && cnt < (t.min || 1)) return;
+      var x = 1 + overlap(t.fit, ind.tags) + 3 * overlap(t.fit, pref);
+      if(t.img === 'none' && cnt > 0) x *= 0.55;
+      if(t.img === 'req' && cnt > 0) x *= 1.25;
+      if(avoid.indexOf(sec + ':' + t.id) > -1) x *= 0.08;
+      c.push(t); w.push(x);
+    });
+    if(!c.length){ c = list.filter(function(t){ return t.img !== 'req'; }); w = c.map(function(){ return 1; }); }
+    return wpick(r, c, w);
+  }
+  var sections = (o.sections || []).filter(function(s){ return s !== 'hero' && TPL[s]; });
+  var recipes = {}, tones = {};
+  var hero = pick('hero'); recipes.hero = hero.id; tones.hero = hero.tone || 'dark';
+  sections.forEach(function(s){ var t = pick(s); recipes[s] = t.id; if(t.tone) tones[s] = t.tone; });
+  var pats = [['tint','light','tint','dark','light','tint'], ['light','tint','dark','light','tint','light'], ['tint','dark','light','tint','light','tint'], ['light','dark','tint','light','dark','light']];
+  var pat = pats[Math.floor(r() * pats.length)], prev = tones.hero === 'light' ? 'light' : 'dark';
+  sections.forEach(function(s, i){
+    if(!tones[s]){ var t = pat[i % pat.length]; if(t === prev) t = prev !== 'tint' ? 'tint' : 'light'; tones[s] = t; }
+    prev = tones[s];
+  });
+  var ids = ['font:' + font.id, 'radius:' + radius.id, 'motif:' + mi];
+  Object.keys(recipes).forEach(function(s){ ids.push(s + ':' + recipes[s]); });
+  return {seed:o.seed, font:{id:font.id, head:font.head, body:font.body, url:'https://fonts.googleapis.com/css2?' + font.q + '&display=swap',
+    head_stack:"'" + font.head + "'," + font.hs, body_stack:"'" + font.body + "'," + font.bs},
+    radius:radius, motif:MOTIFS[mi], mood:'', svc_label:ind.svc, cta_label:ind.cta, recipes:recipes, tones:tones, hero_tone:tones.hero, ids:ids};
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  FREE mode — section renderers (no API). Each recipe: fn(X, toneName) → HTML
+// ═══════════════════════════════════════════════════════════════════════════
+function TN(t){
+  if(t === 'dark') return {n:'dark', bg:'var(--bg)', fg:'#fff', mu:'rgba(255,255,255,.74)', card:'rgba(255,255,255,.07)', bd:'rgba(255,255,255,.15)', chip:'rgba(255,255,255,.12)', chipc:'#fff', alt:'rgba(255,255,255,.04)'};
+  if(t === 'tint') return {n:'tint', bg:'var(--lt)', fg:'var(--td)', mu:'var(--tm)', card:'#fff', bd:'rgba(0,0,0,.07)', chip:'color-mix(in srgb,var(--p) 13%,transparent)', chipc:'var(--p)', alt:'#fff'};
+  return {n:'light', bg:'#fff', fg:'var(--td)', mu:'var(--tm)', card:'var(--lt)', bd:'rgba(0,0,0,.08)', chip:'color-mix(in srgb,var(--p) 13%,transparent)', chipc:'var(--p)', alt:'var(--lt)'};
+}
+function T_sec(id, T, inner, pad){ return '<section id="' + id + '" style="background:' + T.bg + ';color:' + T.fg + ';padding:' + (pad || '96px 0') + ';"><div class="ctr">' + inner + '</div></section>'; }
+function T_head(T, badge, title, sub, align){
+  align = align || 'center';
+  return '<div style="text-align:' + align + ';max-width:' + (align === 'center' ? '720px;margin:0 auto 48px' : '640px;margin:0 0 44px') + ';">' +
+    '<span class="sbadge" style="background:' + T.chip + ';color:' + T.chipc + ';">' + esc(badge) + '</span>' +
+    '<h2 style="font-size:clamp(28px,4vw,46px);margin-bottom:' + (sub ? '14px' : '0') + ';">' + esc(title) + '</h2>' +
+    (sub ? '<p style="color:' + T.mu + ';font-size:16px;line-height:1.75;">' + esc(sub) + '</p>' : '') + '</div>';
+}
+function T_wa(X, label, cls, st, text){
+  var href = X.waBase ? X.waBase + (text ? '?text=' + encodeURIComponent(text) : '') : '#contact';
+  return '<a class="' + (cls || 'btn-p') + '" href="' + esc(href) + '"' + (X.waBase ? ' target="_blank" rel="noopener"' : '') + ' style="' + (st || '') + '">' + (X.waBase ? '<i class="fa-brands fa-whatsapp"></i> ' : '') + esc(label) + '</a>';
+}
+function T_svcs(X){ return (X.svc && X.svc.length ? X.svc : X.ind.defaults).slice(0, 8); }
+function T_svcDesc(X, n, i){ var d = X.ind.desc; return d[i % d.length].replace('{s}', n); }
+function T_ico(X, i){ return X.ind.icons[i % X.ind.icons.length]; }
+function T_cta(X){ return X.law ? 'Contact' : X.brief.cta_label; }
+function T_sub(X){
+  if(X.ext) return X.ext;
+  var s = (X.svc && X.svc.length ? X.svc : []).slice(0, 4).join(' · ');
+  return s || (X.bt + (X.loc ? ' in ' + X.loc : ''));
+}
+function T_headline(X){
+  if(X.law) return X.bn;
+  var h = X.ind.heads[X.brief.seed % X.ind.heads.length];
+  return h.replace('{bn}', X.bn);
+}
+function T_chips(X, st){
+  var l = X.law ? [] : X.ind.chips.slice();
+  if(X.rating && !X.law) l.unshift('★ ' + X.rating + (X.rvn ? ' · ' + X.rvn + ' Google reviews' : ''));
+  if(!l.length) return '';
+  return '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:26px;">' + l.slice(0, 3).map(function(c){ return '<span style="' + (st || 'background:rgba(255,255,255,.14);color:#fff;') + 'font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:99px;">' + esc(c) + '</span>'; }).join('') + '</div>';
+}
+function T_eyebrow(X, st){ return '<span class="sbadge" style="' + (st || 'background:rgba(255,255,255,.14);color:#fff;') + '">' + esc(X.law ? 'Advocate' : X.ind.pill) + (X.loc ? ' · ' + esc(X.loc) : '') + '</span>'; }
+function T_heroKeys(){ return ['hero1', 'hero2', 'hero3'].filter(function(k){ return IM[k]; }); }
+function T_heroBtns(X, dark){
+  return '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:32px;">' + T_wa(X, T_cta(X), 'btn-p') + '<a class="' + (dark ? 'btn-o' : 'btn-g') + '" href="#services">' + esc(X.law ? 'Practice areas' : 'Our ' + X.brief.svc_label.replace(/^Our /, '')) + ' →</a></div>';
+}
+function T_h1(X, st){ return '<h1 style="font-size:clamp(36px,6vw,74px);margin:10px 0 18px;' + (st || '') + '">' + esc(T_headline(X)) + '</h1>'; }
+function T_p(X, st){ return '<p style="font-size:clamp(15px,1.8vw,19px);line-height:1.7;max-width:560px;' + (st || '') + '">' + esc(T_sub(X)) + '</p>'; }
+function T_lawNote(){ return '<p style="margin-top:28px;font-size:12.5px;line-height:1.7;opacity:.75;max-width:640px;">As per Bar Council of India rules, this website is for information only and is not an advertisement or solicitation. Nothing here is legal advice. Please contact us to discuss your matter.</p>'; }
+function T_slider(slides, pv, gap, auto, mode){
+  return '<div class="wb-slider" data-mode="' + (mode || 'slide') + '" data-per-view="' + pv + '" data-gap="' + gap + '" data-autoplay="' + (auto || 0) + '"><div class="wb-viewport"><div class="wb-track">' +
+    slides.map(function(s){ return '<div class="wb-slide">' + s + '</div>'; }).join('') + '</div></div></div>';
+}
+function T_card(T, inner, extra){ return '<div style="background:' + T.card + ';border:1px solid ' + T.bd + ';border-radius:var(--rc);overflow:hidden;' + (extra || '') + '">' + inner + '</div>'; }
+function T_svcImg(i, n, ratio){ var k = 'svc' + (i + 1); return IM[k] ? '<img src="{{IMG:' + k + '}}" alt="' + esc(n) + '" loading="lazy" style="width:100%;aspect-ratio:' + (ratio || '4/3') + ';object-fit:cover;">' : ''; }
+function T_iconBox(X, i, size, st){ return '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:calc(var(--rc) * .6);background:var(--gr);display:flex;align-items:center;justify-content:center;color:#fff;font-size:' + Math.round(size * .42) + 'px;' + (st || '') + '"><i class="fa-solid ' + T_ico(X, i) + '"></i></div>'; }
+function T_more(X, n, T){ return X.waBase ? '<a href="' + esc(X.waBase + '?text=' + encodeURIComponent('Hi, I would like to know more about ' + n)) + '" target="_blank" rel="noopener" style="font-weight:700;font-size:14px;color:' + (T.n === 'dark' ? 'var(--a)' : 'var(--p)') + ';">' + (X.law ? 'Contact' : 'Enquire') + ' →</a>' : ''; }
+function T_galKeys(){ return Object.keys(IM).filter(function(k){ return /^gal\d+$/.test(k); }); }
+function T_gimg(k, i, X, st){ return '<img src="{{IMG:' + k + '}}" data-lightbox alt="' + esc(X.bn) + ' photo ' + (i + 1) + '" loading="lazy" style="width:100%;' + (st || '') + 'object-fit:cover;border-radius:var(--ri);cursor:zoom-in;">'; }
+function T_about_text(X){
+  if(X.ext) return X.ext;
+  return X.bn + ' is ' + (/^[aeiou]/i.test(X.bt) ? 'an ' : 'a ') + X.bt.toLowerCase() + (X.loc ? ' based in ' + X.loc : '') + '. ' + (X.law ? 'Please contact us to discuss your matter.' : 'Message us on WhatsApp to know more or to book a visit.');
+}
+
+// ───────────────────────── HERO ─────────────────────────
+function heroCover(X){
+  var bg = IM.hero1 ? 'linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.35)),url({{IMG:hero1}}) center/cover' : 'var(--gr)';
+  return '<section id="home" style="position:relative;min-height:100vh;display:flex;align-items:center;color:#fff;background:' + bg + ';"><div class="ctr" style="padding-top:130px;padding-bottom:90px;">' + T_eyebrow(X) + T_h1(X, 'max-width:820px;') + T_p(X, 'opacity:.92;') + T_heroBtns(X, true) + T_chips(X) + (X.law ? T_lawNote() : '') + '</div></section>';
+}
+function heroSplit(X){
+  return '<section id="home" style="background:var(--lt);color:var(--td);padding:130px 0 80px;min-height:92vh;display:flex;align-items:center;"><div class="ctr" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:center;width:100%;">' +
+    '<div>' + T_eyebrow(X, '') + T_h1(X) + T_p(X, 'color:var(--tm);') + T_heroBtns(X, false) + T_chips(X, 'background:#fff;color:var(--td);box-shadow:0 2px 10px rgba(0,0,0,.07);') + (X.law ? T_lawNote() : '') + '</div>' +
+    '<div style="position:relative;"><img src="{{IMG:hero1}}" alt="' + esc(X.bn) + '" style="width:100%;height:min(560px,70vh);object-fit:cover;border-radius:var(--ri);box-shadow:0 30px 70px rgba(0,0,0,.2);">' +
+    '<div style="position:absolute;left:-14px;bottom:28px;background:var(--p);color:#fff;padding:14px 20px;border-radius:calc(var(--rc) * .7);font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.25);font-size:14px;"><i class="fa-solid ' + T_ico(X, 0) + '"></i>&nbsp; ' + esc(X.law ? 'Advocate' : X.ind.pill) + '</div></div></div></section>';
+}
+function heroGrad(X){
+  return '<section id="home" style="position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;text-align:center;color:#fff;background:var(--bg);">' +
+    '<div style="position:absolute;width:620px;height:620px;border-radius:50%;background:var(--p);opacity:.32;filter:blur(110px);top:-160px;right:-120px;"></div><div style="position:absolute;width:480px;height:480px;border-radius:50%;background:var(--a);opacity:.2;filter:blur(110px);bottom:-160px;left:-100px;"></div>' +
+    '<div class="ctr" style="position:relative;padding-top:130px;padding-bottom:90px;display:flex;flex-direction:column;align-items:center;">' + T_eyebrow(X) + T_h1(X, 'max-width:900px;') + T_p(X, 'opacity:.9;margin:0 auto;') +
+    '<div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:32px;">' + T_wa(X, T_cta(X), 'btn-p') + '<a class="btn-o" href="#services">Explore →</a></div>' + T_chips(X).replace('display:flex;', 'display:flex;justify-content:center;') + (X.law ? T_lawNote() : '') + '</div></section>';
+}
+function heroSlider(X){
+  var ks = T_heroKeys();
+  var slides = ks.map(function(k){ return '<div style="min-height:100vh;background:url({{IMG:' + k + '}}) center/cover;"></div>'; });
+  return '<section id="home" style="position:relative;color:#fff;background:var(--bg);">' + T_slider(slides, 1, 0, 6000, 'fade') +
+    '<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.25));pointer-events:none;z-index:2;"></div>' +
+    '<div style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;pointer-events:none;"><div class="ctr" style="padding-top:110px;pointer-events:none;">' + T_eyebrow(X) + T_h1(X, 'max-width:820px;') + T_p(X, 'opacity:.92;') + '<div style="pointer-events:auto;">' + T_heroBtns(X, true) + '</div>' + (X.law ? T_lawNote() : '') + '</div></div></section>';
+}
+function heroEditorial(X){
+  var img = IM.hero1 ? '<div style="margin-top:56px;"><img src="{{IMG:hero1}}" alt="' + esc(X.bn) + '" style="width:100%;height:min(420px,46vh);object-fit:cover;border-radius:var(--ri);"></div>' : '';
+  return '<section id="home" style="background:#fff;color:var(--td);padding:140px 0 70px;"><div class="ctr"><div style="border-top:2px solid var(--td);padding-top:18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;"><span>' + esc(X.law ? 'Advocate' : X.ind.pill) + '</span><span>' + esc(X.loc || '') + '</span></div>' +
+    '<h1 style="font-size:clamp(44px,9.5vw,128px);line-height:.98;margin:28px 0 26px;letter-spacing:-.02em;">' + esc(T_headline(X)) + '</h1>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;align-items:end;">' + T_p(X, 'color:var(--tm);') + '<div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:flex-end;">' + T_wa(X, T_cta(X), 'btn-p') + '<a class="btn-g" href="#services">Explore →</a></div></div>' + img + (X.law ? T_lawNote() : '') + '</div></section>';
+}
+function heroArch(X){
+  return '<section id="home" style="background:var(--bg);color:#fff;padding:130px 0 80px;min-height:92vh;display:flex;align-items:center;"><div class="ctr" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:center;width:100%;">' +
+    '<div>' + T_eyebrow(X) + T_h1(X) + T_p(X, 'opacity:.88;') + T_heroBtns(X, true) + T_chips(X) + (X.law ? T_lawNote() : '') + '</div>' +
+    '<div style="display:flex;justify-content:center;"><div style="width:min(420px,100%);height:min(540px,64vh);border-radius:999px 999px 24px 24px;overflow:hidden;border:6px solid rgba(255,255,255,.18);box-shadow:0 30px 80px rgba(0,0,0,.45);"><img src="{{IMG:hero1}}" alt="' + esc(X.bn) + '" style="width:100%;height:100%;object-fit:cover;"></div></div></div></section>';
+}
+function heroCard(X){
+  var bg = IM.hero1 ? 'url({{IMG:hero1}}) center/cover' : 'var(--gr)';
+  return '<section id="home" style="position:relative;min-height:100vh;display:flex;align-items:center;background:' + bg + ';"><div style="position:absolute;inset:0;background:rgba(0,0,0,.3);"></div>' +
+    '<div class="ctr" style="position:relative;padding-top:120px;padding-bottom:80px;width:100%;"><div style="max-width:560px;background:#fff;color:var(--td);padding:clamp(26px,4vw,48px);border-radius:var(--rc);box-shadow:0 30px 80px rgba(0,0,0,.35);">' +
+    T_eyebrow(X, '') + T_h1(X, 'font-size:clamp(32px,4.6vw,56px);') + T_p(X, 'color:var(--tm);') + T_heroBtns(X, false) + T_chips(X, 'background:var(--lt);color:var(--td);') + (X.law ? T_lawNote() : '') + '</div></div></section>';
+}
+function heroDiag(X){
+  return '<section id="home" style="position:relative;overflow:hidden;min-height:100vh;display:flex;align-items:center;color:#fff;background:var(--gr);"><div style="position:absolute;inset:0;background:linear-gradient(115deg,transparent 52%,rgba(255,255,255,.08) 52%,rgba(255,255,255,.08) 70%,transparent 70%);"></div>' +
+    '<div style="position:absolute;right:-6%;bottom:-10%;font-size:clamp(220px,36vw,520px);opacity:.09;line-height:1;"><i class="fa-solid ' + T_ico(X, 0) + '"></i></div>' +
+    '<div class="ctr" style="position:relative;padding-top:130px;padding-bottom:90px;">' + T_eyebrow(X) + T_h1(X, 'max-width:860px;') + T_p(X, 'opacity:.92;') + T_heroBtns(X, true) + T_chips(X) + (X.law ? T_lawNote() : '') + '</div></section>';
+}
+
+// ───────────────────────── SERVICES ─────────────────────────
+function svcGrid(X, tn){
+  var T = TN(tn), s = T_svcs(X);
+  return T_sec('services', T, T_head(T, X.brief.svc_label, 'What we offer', '') +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;">' + s.map(function(n, i){
+      var im = T_svcImg(i, n);
+      return '<div data-aos="fade-up">' + T_card(T, (im || '<div style="aspect-ratio:4/3;background:var(--gr);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.9);font-size:46px;"><i class="fa-solid ' + T_ico(X, i) + '"></i></div>') +
+        '<div style="padding:22px;"><h3 style="font-size:19px;margin-bottom:8px;">' + esc(n) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.7;margin-bottom:14px;">' + esc(T_svcDesc(X, n, i)) + '</p>' + T_more(X, n, T) + '</div>', 'height:100%;box-shadow:0 8px 28px rgba(0,0,0,.06);') + '</div>';
+    }).join('') + '</div>');
+}
+function svcIcons(X, tn){
+  var T = TN(tn), s = T_svcs(X);
+  return T_sec('services', T, T_head(T, X.brief.svc_label, 'Everything in one place', '') +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;">' + s.map(function(n, i){
+      return '<div data-aos="fade-up" style="padding:30px 26px;border-radius:var(--rc);background:' + T.card + ';border:1px solid ' + T.bd + ';position:relative;overflow:hidden;">' +
+        '<div style="position:absolute;right:16px;top:6px;font-size:64px;font-weight:800;opacity:.07;font-family:var(--fh);">' + String(i + 1).padStart(2, '0') + '</div>' + T_iconBox(X, i, 54, 'margin-bottom:18px;') +
+        '<h3 style="font-size:19px;margin-bottom:8px;">' + esc(n) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.7;margin-bottom:12px;">' + esc(T_svcDesc(X, n, i)) + '</p>' + T_more(X, n, T) + '</div>';
+    }).join('') + '</div>');
+}
+function svcSlider(X, tn){
+  var T = TN(tn), s = T_svcs(X);
+  var slides = s.map(function(n, i){
+    var im = T_svcImg(i, n, '4/3');
+    return T_card(T, (im || '<div style="aspect-ratio:4/3;background:var(--gr);display:flex;align-items:center;justify-content:center;color:#fff;font-size:44px;"><i class="fa-solid ' + T_ico(X, i) + '"></i></div>') + '<div style="padding:22px;"><h3 style="font-size:19px;margin-bottom:8px;">' + esc(n) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.65;margin-bottom:12px;">' + esc(T_svcDesc(X, n, i)) + '</p>' + T_more(X, n, T) + '</div>', 'height:100%;');
+  });
+  return T_sec('services', T, T_head(T, X.brief.svc_label, 'Explore our ' + X.ind.svc.toLowerCase(), '') + '<div style="padding:0 6px;">' + T_slider(slides, 3, 22, 5500, 'slide') + '</div>');
+}
+function svcRows(X, tn){
+  var T = TN(tn), s = T_svcs(X);
+  return T_sec('services', T, '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:52px;"><div>' + T_head(T, X.brief.svc_label, 'What we do', 'A quick look at how we can help.', 'left') + '</div>' +
+    '<div>' + s.map(function(n, i){
+      return '<div style="display:flex;gap:20px;align-items:flex-start;padding:22px 0;border-top:1px solid ' + T.bd + ';"><div style="font-family:var(--fh);font-size:15px;font-weight:700;color:var(--p);min-width:34px;">' + String(i + 1).padStart(2, '0') + '</div><div style="flex:1;"><h3 style="font-size:20px;margin-bottom:6px;">' + esc(n) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.7;">' + esc(T_svcDesc(X, n, i)) + '</p></div><div style="font-size:18px;color:var(--p);">' + (X.waBase ? '<a href="' + esc(X.waBase + '?text=' + encodeURIComponent('Hi, I would like to know more about ' + n)) + '" target="_blank" rel="noopener" aria-label="Enquire">→</a>' : '→') + '</div></div>';
+    }).join('') + '<div style="border-top:1px solid ' + T.bd + ';"></div></div></div>');
+}
+function svcTabs(X, tn){
+  var T = TN(tn), s = T_svcs(X);
+  var tabs = s.map(function(n, i){ return '<button type="button" class="wb-tab" style="text-align:left;padding:14px 18px;border:1px solid ' + T.bd + ';border-radius:calc(var(--rc) * .6);background:' + T.card + ';color:inherit;font:600 15px var(--fb);cursor:pointer;display:flex;gap:12px;align-items:center;"><i class="fa-solid ' + T_ico(X, i) + '" style="color:var(--p);width:20px;text-align:center;"></i>' + esc(n) + '</button>'; }).join('');
+  var panels = s.map(function(n, i){
+    var im = T_svcImg(i, n, '16/10');
+    return '<div class="wb-panel">' + (im ? '<div style="border-radius:var(--ri);overflow:hidden;margin-bottom:20px;">' + im + '</div>' : '<div style="height:220px;border-radius:var(--ri);background:var(--gr);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.9);font-size:64px;margin-bottom:20px;"><i class="fa-solid ' + T_ico(X, i) + '"></i></div>') +
+      '<h3 style="font-size:26px;margin-bottom:10px;">' + esc(n) + '</h3><p style="color:' + T.mu + ';line-height:1.8;margin-bottom:18px;">' + esc(T_svcDesc(X, n, i)) + '</p>' + T_wa(X, X.law ? 'Contact' : 'Enquire about this', 'btn-p', '', 'Hi, I would like to know more about ' + n) + '</div>';
+  }).join('');
+  return T_sec('services', T, T_head(T, X.brief.svc_label, 'Choose a service', '') + '<div class="wb-tabs" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:36px;align-items:start;"><div style="display:flex;flex-direction:column;gap:10px;">' + tabs + '</div><div>' + panels + '</div></div>' +
+    '<style>.wb-tab.active{background:var(--p)!important;color:#fff!important;border-color:var(--p)!important}.wb-tab.active i{color:#fff!important}</style>');
+}
+function svcGlass(X, tn){
+  var T = TN('dark'), s = T_svcs(X);
+  return T_sec('services', T, T_head(T, X.brief.svc_label, 'Our expertise', '') +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">' + s.map(function(n, i){
+      return '<div data-aos="fade-up" style="padding:28px;border-radius:var(--rc);background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);"><div style="font-size:30px;color:var(--a);margin-bottom:16px;"><i class="fa-solid ' + T_ico(X, i) + '"></i></div><h3 style="font-size:19px;margin-bottom:8px;">' + esc(n) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.7;margin-bottom:12px;">' + esc(T_svcDesc(X, n, i)) + '</p>' + T_more(X, n, T) + '</div>';
+    }).join('') + '</div>');
+}
+function svcTiles(X, tn){
+  var T = TN(tn), s = T_svcs(X);
+  return T_sec('services', T, T_head(T, X.brief.svc_label, 'Our ' + X.ind.svc.toLowerCase(), '') +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;">' + s.map(function(n, i){
+      var k = 'svc' + (i + 1), bg = IM[k] ? 'url({{IMG:' + k + '}}) center/cover' : 'var(--gr)';
+      return '<a ' + (X.waBase ? 'href="' + esc(X.waBase + '?text=' + encodeURIComponent('Hi, I would like to know more about ' + n)) + '" target="_blank" rel="noopener"' : 'href="#contact"') + ' style="position:relative;display:flex;align-items:flex-end;min-height:300px;border-radius:var(--rc);overflow:hidden;background:' + bg + ';color:#fff;"><div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.78),rgba(0,0,0,.05) 70%);"></div><div style="position:relative;padding:22px;"><h3 style="font-size:20px;margin-bottom:4px;">' + esc(n) + '</h3><span style="font-size:13px;opacity:.85;">' + (X.law ? 'Contact' : 'Enquire') + ' →</span></div></a>';
+    }).join('') + '</div>');
+}
+function svcBento(X, tn){
+  var T = TN(tn), s = T_svcs(X);
+  return T_sec('services', T, T_head(T, X.brief.svc_label, 'How we can help', '') +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;">' + s.map(function(n, i){
+      var big = i === 0;
+      return '<div data-aos="fade-up" style="' + (big ? 'grid-column:span 2;background:var(--gr);color:#fff;' : 'background:' + T.card + ';border:1px solid ' + T.bd + ';') + 'padding:' + (big ? '38px' : '26px') + ';border-radius:var(--rc);min-width:0;"><div style="font-size:' + (big ? 38 : 26) + 'px;margin-bottom:' + (big ? 22 : 14) + 'px;color:' + (big ? '#fff' : 'var(--p)') + ';"><i class="fa-solid ' + T_ico(X, i) + '"></i></div><h3 style="font-size:' + (big ? 26 : 18) + 'px;margin-bottom:8px;">' + esc(n) + '</h3><p style="font-size:14.5px;line-height:1.7;opacity:' + (big ? '.9' : '1') + ';color:' + (big ? '#fff' : T.mu) + ';margin-bottom:12px;">' + esc(T_svcDesc(X, n, i)) + '</p>' + (big ? T_wa(X, X.law ? 'Contact' : 'Enquire', 'btn-o') : T_more(X, n, T)) + '</div>';
+    }).join('') + '</div>') + (X.law ? '' : '');
+}
+
+// ───────────────────────── ABOUT ─────────────────────────
+function aboutBullets(X, T){ return '<ul style="margin-top:20px;display:grid;gap:10px;">' + T_svcs(X).slice(0, 4).map(function(n){ return '<li style="display:flex;gap:10px;align-items:center;font-weight:600;"><i class="fa-solid fa-circle-check" style="color:var(--p);"></i>' + esc(n) + '</li>'; }).join('') + '</ul>'; }
+function aboutImg(X, ph){ return IM.about ? '<img src="{{IMG:about}}" alt="' + esc(X.bn) + '" loading="lazy" style="width:100%;height:min(460px,60vh);object-fit:cover;border-radius:var(--ri);">' : '<div style="height:360px;border-radius:var(--ri);background:var(--gr);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.35);font-size:90px;"><i class="fa-solid ' + (ph || 'fa-building') + '"></i></div>'; }
+function aboutSplit(X, tn){
+  var T = TN(tn);
+  return T_sec('about', T, '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:center;"><div>' + T_head(T, 'About us', X.bn, '', 'left').replace(/margin:0 0 44px/, 'margin:0 0 18px') +
+    '<p style="color:' + T.mu + ';font-size:16.5px;line-height:1.85;">' + esc(T_about_text(X)) + '</p>' + aboutBullets(X, T) + '<div style="margin-top:28px;">' + T_wa(X, T_cta(X), 'btn-p') + '</div>' + (X.law ? T_lawNote() : '') + '</div><div>' + aboutImg(X, X.ind.icons[0]) + '</div></div>');
+}
+function aboutSplitRev(X, tn){
+  var T = TN(tn);
+  return T_sec('about', T, '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:center;"><div style="position:relative;">' + aboutImg(X, X.ind.icons[1]) + '<div style="position:absolute;right:-12px;bottom:-12px;width:46%;height:46%;border:4px solid var(--p);border-radius:var(--ri);z-index:-1;"></div></div><div>' +
+    T_head(T, 'Our story', 'About ' + X.bn, '', 'left').replace(/margin:0 0 44px/, 'margin:0 0 18px') + '<p style="color:' + T.mu + ';font-size:16.5px;line-height:1.85;">' + esc(T_about_text(X)) + '</p>' + (X.loc ? '<p style="margin-top:18px;font-weight:600;"><i class="fa-solid fa-location-dot" style="color:var(--p);"></i> ' + esc(X.loc) + '</p>' : '') + (X.law ? T_lawNote() : '') + '</div></div>', '110px 0');
+}
+function aboutCenter(X, tn){
+  var T = TN(tn);
+  return T_sec('about', T, '<div style="max-width:780px;margin:0 auto;text-align:center;"><span class="sbadge" style="background:' + T.chip + ';color:' + T.chipc + ';">About us</span><h2 style="font-size:clamp(28px,4.4vw,50px);margin:6px 0 20px;">' + esc(X.bn) + '</h2><p style="color:' + T.mu + ';font-size:17.5px;line-height:1.9;">' + esc(T_about_text(X)) + '</p>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px;">' + T_svcs(X).slice(0, 6).map(function(n){ return '<span style="padding:8px 16px;border-radius:99px;background:' + T.card + ';border:1px solid ' + T.bd + ';font-size:13.5px;font-weight:600;">' + esc(n) + '</span>'; }).join('') + '</div>' + (X.law ? T_lawNote() : '') + '</div>');
+}
+function aboutOverlap(X, tn){
+  var T = TN(tn);
+  return '<section id="about" style="background:' + T.bg + ';color:' + T.fg + ';padding:96px 0;"><div class="ctr" style="position:relative;"><div style="border-radius:var(--ri);overflow:hidden;">' + aboutImg(X, X.ind.icons[2]).replace('min(460px,60vh)', 'min(520px,64vh)') + '</div>' +
+    '<div style="position:relative;max-width:560px;margin:-90px 0 0 clamp(0px,5vw,60px);background:#fff;color:var(--td);padding:clamp(26px,4vw,44px);border-radius:var(--rc);box-shadow:0 24px 60px rgba(0,0,0,.18);"><span class="sbadge">About us</span><h2 style="font-size:clamp(26px,3.4vw,38px);margin-bottom:14px;">' + esc(X.bn) + '</h2><p style="color:var(--tm);line-height:1.85;">' + esc(T_about_text(X)) + '</p>' + (X.law ? T_lawNote() : '') + '</div></div></section>';
+}
+function aboutBand(X, tn){
+  var T = TN('dark');
+  return T_sec('about', T, '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;align-items:center;"><div><div style="font-size:70px;line-height:.6;color:var(--a);font-family:Georgia,serif;">“</div><p style="font-family:var(--fh);font-size:clamp(22px,3vw,34px);line-height:1.4;">' + esc(X.ext || (X.ind.heads[0].replace('{bn}', X.bn))) + '</p><p style="margin-top:22px;color:' + T.mu + ';line-height:1.8;">' + esc(X.ext ? '' : T_about_text(X)) + '</p>' + (X.law ? T_lawNote() : '') + '</div><div>' + aboutImg(X, X.ind.icons[3]) + '</div></div>');
+}
+function aboutList(X, tn){
+  var T = TN(tn), s = T_svcs(X).slice(0, 6);
+  return T_sec('about', T, '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:56px;align-items:start;"><div>' + T_head(T, 'About us', X.bn, '', 'left').replace(/margin:0 0 44px/, 'margin:0 0 18px') + '<p style="color:' + T.mu + ';font-size:16.5px;line-height:1.85;">' + esc(T_about_text(X)) + '</p>' + (X.law ? T_lawNote() : '') + '</div>' +
+    '<div style="display:grid;gap:14px;">' + s.map(function(n, i){ return '<div style="display:flex;gap:16px;align-items:center;padding:18px 20px;border-radius:var(--rc);background:' + T.card + ';border:1px solid ' + T.bd + ';">' + T_iconBox(X, i, 44) + '<div style="font-weight:700;">' + esc(n) + '</div></div>'; }).join('') + '</div></div>');
+}
+
+// ───────────────────────── PROCESS ─────────────────────────
+function steps(X){ return X.ind.steps.length ? X.ind.steps : IND_DEFAULT.steps; }
+function procRow(X, tn){
+  var T = TN(tn), st = steps(X);
+  return T_sec('process', T, T_head(T, 'How it works', 'Simple steps, clear process', '') + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;">' + st.map(function(s, i){
+    return '<div style="text-align:center;padding:0 8px;"><div style="width:64px;height:64px;margin:0 auto 18px;border-radius:50%;background:var(--gr);color:#fff;display:flex;align-items:center;justify-content:center;font:700 22px var(--fh);">' + (i + 1) + '</div><h3 style="font-size:19px;margin-bottom:8px;">' + esc(s[0]) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.7;">' + esc(s[1]) + '</p></div>'; }).join('') + '</div>');
+}
+function procTimeline(X, tn){
+  var T = TN(tn), st = steps(X);
+  return T_sec('process', T, T_head(T, 'How it works', 'What to expect', '') + '<div style="max-width:720px;margin:0 auto;border-left:2px solid ' + T.bd + ';padding-left:34px;">' + st.map(function(s, i){
+    return '<div style="position:relative;padding-bottom:' + (i < st.length - 1 ? '34px' : '0') + ';"><div style="position:absolute;left:-52px;top:0;width:36px;height:36px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font:700 15px var(--fh);">' + (i + 1) + '</div><h3 style="font-size:20px;margin-bottom:6px;">' + esc(s[0]) + '</h3><p style="color:' + T.mu + ';line-height:1.75;">' + esc(s[1]) + '</p></div>'; }).join('') + '</div>');
+}
+function procCards(X, tn){
+  var T = TN(tn), st = steps(X);
+  return T_sec('process', T, T_head(T, 'How it works', 'Getting started is easy', '') + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;">' + st.map(function(s, i){
+    return '<div style="position:relative;padding:34px 26px 28px;border-radius:var(--rc);background:' + T.card + ';border:1px solid ' + T.bd + ';overflow:hidden;"><div style="position:absolute;right:14px;top:-8px;font:800 84px var(--fh);opacity:.08;">' + (i + 1) + '</div><div style="font-size:26px;color:var(--p);margin-bottom:14px;"><i class="fa-solid ' + T_ico(X, i) + '"></i></div><h3 style="font-size:19px;margin-bottom:8px;">' + esc(s[0]) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.7;">' + esc(s[1]) + '</p></div>'; }).join('') + '</div>');
+}
+function procBand(X, tn){
+  var T = TN('dark'), st = steps(X);
+  return T_sec('process', T, T_head(T, 'How it works', 'Four simple steps', '') + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0;border:1px solid ' + T.bd + ';border-radius:var(--rc);overflow:hidden;">' + st.map(function(s, i){
+    return '<div style="padding:30px 26px;border-right:1px solid ' + T.bd + ';"><div style="font:800 40px var(--fh);color:var(--a);margin-bottom:10px;">0' + (i + 1) + '</div><h3 style="font-size:18px;margin-bottom:8px;">' + esc(s[0]) + '</h3><p style="color:' + T.mu + ';font-size:14.5px;line-height:1.7;">' + esc(s[1]) + '</p></div>'; }).join('') + '</div>');
+}
+
+// ───────────────────────── GALLERY ─────────────────────────
+function galGrid(X, tn){
+  var T = TN(tn), ks = T_galKeys();
+  return T_sec('gallery', T, T_head(T, 'Gallery', X.law ? 'Gallery' : 'A look at our work', '') + '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;">' + ks.map(function(k, i){ return T_gimg(k, i, X, 'aspect-ratio:1;'); }).join('') + '</div>');
+}
+function galMasonry(X, tn){
+  var T = TN(tn), ks = T_galKeys();
+  return T_sec('gallery', T, T_head(T, 'Gallery', 'Moments from ' + X.bn, '') + '<div style="column-width:250px;column-gap:14px;">' + ks.map(function(k, i){ return '<div style="break-inside:avoid;margin-bottom:14px;">' + T_gimg(k, i, X, 'height:auto;') + '</div>'; }).join('') + '</div>');
+}
+function galSlider(X, tn){
+  var T = TN(tn), ks = T_galKeys();
+  var slides = ks.map(function(k, i){ return T_gimg(k, i, X, 'aspect-ratio:4/3;'); });
+  return T_sec('gallery', T, T_head(T, 'Gallery', 'Take a look around', '') + T_slider(slides, 3, 16, 4500, 'slide'));
+}
+function galMosaic(X, tn){
+  var T = TN(tn), ks = T_galKeys().slice(0, 7);
+  return T_sec('gallery', T, T_head(T, 'Gallery', 'Our work in pictures', '') + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));grid-auto-rows:200px;grid-auto-flow:dense;gap:14px;">' + ks.map(function(k, i){
+    var big = i === 0 && ks.length > 3;
+    return '<div style="' + (big ? 'grid-column:span 2;grid-row:span 2;' : '') + 'overflow:hidden;border-radius:var(--ri);">' + T_gimg(k, i, X, 'height:100%;') + '</div>'; }).join('') + '</div>');
+}
+function galStrip(X, tn){
+  var T = TN('dark'), ks = T_galKeys();
+  return T_sec('gallery', T, T_head(T, 'Gallery', 'Swipe through our gallery', '') + T_slider(ks.map(function(k, i){ return T_gimg(k, i, X, 'aspect-ratio:16/10;'); }), 1, 0, 5000, 'fade'));
+}
+
+// ───────────────────────── TESTIMONIALS ─────────────────────────
+function revList(X){
+  if(X.reviews && X.reviews.length) return X.reviews.slice(0, 6);
+  return [1, 2, 3].map(function(){ return {name:'Client name', text:'Sample review text. Replace this with a real customer review.', sample:true}; });
+}
+function revTag(r){ return r.sample ? '<div style="margin-top:12px;font-size:11px;font-weight:700;color:#b45309;background:#fef3c7;display:inline-block;padding:3px 10px;border-radius:99px;">Sample – replace with a real review</div>' : ''; }
+function revCard(T, r){ return '<div' + (r.sample ? ' data-sample="true"' : '') + ' style="height:100%;background:' + T.card + ';border:1px solid ' + T.bd + ';border-radius:var(--rc);padding:28px;"><div style="color:#F59E0B;margin-bottom:12px;letter-spacing:2px;">★★★★★</div><p style="color:' + T.mu + ';font-style:italic;line-height:1.75;margin-bottom:16px;">“' + esc(r.text) + '”</p><strong>' + esc(r.name || 'Google reviewer') + '</strong>' + revTag(r) + '</div>'; }
+function revGrid(X, tn){
+  var T = TN(tn), rs = revList(X);
+  return T_sec('testimonials', T, T_head(T, 'Reviews', 'What people say', X.rating ? 'Rated ' + X.rating + (X.rvn ? ' from ' + X.rvn + ' Google reviews' : '') : '') + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px;">' + rs.map(function(r){ return revCard(T, r); }).join('') + '</div>');
+}
+function revSlider(X, tn){
+  var T = TN(tn), rs = revList(X);
+  return T_sec('testimonials', T, T_head(T, 'Reviews', 'Kind words', '') + '<div style="padding:0 4px;">' + T_slider(rs.map(function(r){ return revCard(T, r); }), 3, 20, 6000, 'slide') + '</div>');
+}
+function revQuote(X, tn){
+  var T = TN(tn), rs = revList(X);
+  return T_sec('testimonials', T, '<div style="max-width:820px;margin:0 auto;text-align:center;">' + T_slider(rs.map(function(r){
+    return '<div style="padding:10px 50px 34px;"' + (r.sample ? ' data-sample="true"' : '') + '><div style="font-size:60px;line-height:.7;color:var(--p);font-family:Georgia,serif;">“</div><p style="font-family:var(--fh);font-size:clamp(20px,2.8vw,30px);line-height:1.5;margin:10px 0 22px;">' + esc(r.text) + '</p><div style="color:#F59E0B;margin-bottom:8px;">★★★★★</div><strong>' + esc(r.name || 'Google reviewer') + '</strong><br>' + revTag(r) + '</div>'; }), 1, 0, 7000, 'fade') + '</div>');
+}
+function revDark(X, tn){
+  var T = TN('dark'), rs = revList(X);
+  return T_sec('testimonials', T, T_head(T, 'Reviews', 'Loved by our ' + X.ind.noun + 's', '') + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px;">' + rs.map(function(r){ return revCard(T, r); }).join('') + '</div>');
+}
+
+// ───────────────────────── FAQ ─────────────────────────
+function faqs(X){ return (X.ind.faq && X.ind.faq.length ? X.ind.faq : IND_DEFAULT.faq).concat([['Where can I find you?', X.loc ? 'We are located in ' + X.loc + '. Details are in the contact section below.' : 'Our contact details are in the section below.']]); }
+function faqAcc(X, tn){
+  var T = TN(tn), f = faqs(X);
+  return T_sec('faq', T, T_head(T, 'FAQ', 'Questions, answered', '') + '<div style="max-width:780px;margin:0 auto;display:grid;gap:12px;">' + f.map(function(q, i){
+    return '<details' + (i === 0 ? ' open' : '') + ' style="background:' + T.card + ';border:1px solid ' + T.bd + ';border-radius:var(--rc);padding:0 22px;"><summary style="padding:20px 0;font-weight:700;display:flex;justify-content:space-between;gap:12px;align-items:center;">' + esc(q[0]) + '<span style="color:var(--p);font-size:20px;">+</span></summary><p style="color:' + T.mu + ';line-height:1.8;padding-bottom:20px;">' + esc(q[1]) + '</p></details>'; }).join('') + '</div>');
+}
+function faqSide(X, tn){
+  var T = TN(tn), f = faqs(X);
+  return T_sec('faq', T, '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:48px;"><div>' + T_head(T, 'FAQ', 'Have a question?', 'Find quick answers here, or message us directly.', 'left') + T_wa(X, X.law ? 'Contact' : 'Ask on WhatsApp', 'btn-p') + '</div><div>' + f.map(function(q){
+    return '<details style="border-bottom:1px solid ' + T.bd + ';"><summary style="padding:20px 0;font-weight:700;display:flex;justify-content:space-between;gap:12px;">' + esc(q[0]) + '<span style="color:var(--p);">+</span></summary><p style="color:' + T.mu + ';line-height:1.8;padding-bottom:20px;">' + esc(q[1]) + '</p></details>'; }).join('') + '</div></div>');
+}
+function faqCards(X, tn){
+  var T = TN(tn), f = faqs(X);
+  return T_sec('faq', T, T_head(T, 'FAQ', 'Good to know', '') + '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">' + f.map(function(q){
+    return '<div style="padding:26px;border-radius:var(--rc);background:' + T.card + ';border:1px solid ' + T.bd + ';"><h3 style="font-size:17px;margin-bottom:10px;"><i class="fa-solid fa-circle-question" style="color:var(--p);margin-right:8px;"></i>' + esc(q[0]) + '</h3><p style="color:' + T.mu + ';line-height:1.75;font-size:14.5px;">' + esc(q[1]) + '</p></div>'; }).join('') + '</div>');
+}
+
+// ───────────────────────── registry ─────────────────────────
+var TPL = {
+  hero:[
+    {id:'cover', img:'opt', tone:'dark', fit:['luxury','bold','warm','energy','trust'], fn:heroCover},
+    {id:'split', img:'req', tone:'light', fit:['clean','friendly','trust','calm'], fn:heroSplit},
+    {id:'gradient-center', img:'none', tone:'dark', fit:['tech','bold','clean','energy'], fn:heroGrad},
+    {id:'fade-slider', img:'req', min:2, tone:'dark', fit:['luxury','warm','energy','editorial'], fn:heroSlider},
+    {id:'editorial', img:'opt', tone:'light', fit:['editorial','classic','luxury'], fn:heroEditorial},
+    {id:'arch-dark', img:'req', tone:'dark', fit:['luxury','calm','warm'], fn:heroArch},
+    {id:'floating-card', img:'opt', tone:'dark', fit:['friendly','warm','trust','clean'], fn:heroCard},
+    {id:'diagonal', img:'none', tone:'dark', fit:['bold','energy','tech','trust'], fn:heroDiag}
+  ],
+  services:[
+    {id:'cards', img:'opt', fit:['clean','friendly','trust'], fn:svcGrid},
+    {id:'icons', img:'none', fit:['clean','tech','trust','friendly'], fn:svcIcons},
+    {id:'slider', img:'req', min:2, fit:['luxury','warm','energy','friendly'], fn:svcSlider},
+    {id:'rows', img:'none', fit:['editorial','classic','luxury'], fn:svcRows},
+    {id:'tabs', img:'opt', fit:['clean','tech','calm','trust'], fn:svcTabs},
+    {id:'glass', img:'none', tone:'dark', fit:['tech','bold','luxury'], fn:svcGlass},
+    {id:'tiles', img:'req', min:2, fit:['bold','energy','warm','luxury'], fn:svcTiles},
+    {id:'bento', img:'none', fit:['tech','bold','clean','friendly'], fn:svcBento}
+  ],
+  about:[
+    {id:'split', img:'opt', fit:['clean','trust','friendly','calm'], fn:aboutSplit},
+    {id:'split-rev', img:'opt', fit:['warm','editorial','classic'], fn:aboutSplitRev},
+    {id:'center', img:'none', fit:['luxury','calm','editorial'], fn:aboutCenter},
+    {id:'overlap', img:'req', fit:['luxury','warm','editorial','friendly'], fn:aboutOverlap},
+    {id:'quote-band', img:'opt', tone:'dark', fit:['luxury','bold','trust'], fn:aboutBand},
+    {id:'list', img:'none', fit:['clean','tech','trust'], fn:aboutList}
+  ],
+  process:[
+    {id:'row', img:'none', fit:['clean','friendly','trust','calm'], fn:procRow},
+    {id:'timeline', img:'none', fit:['classic','editorial','trust','calm'], fn:procTimeline},
+    {id:'cards', img:'none', fit:['tech','bold','friendly','clean'], fn:procCards},
+    {id:'band', img:'none', tone:'dark', fit:['bold','luxury','energy'], fn:procBand}
+  ],
+  gallery:[
+    {id:'grid', img:'req', fit:['clean','trust','friendly'], fn:galGrid},
+    {id:'masonry', img:'req', fit:['editorial','warm','luxury'], fn:galMasonry},
+    {id:'slider', img:'req', min:2, fit:['friendly','warm','energy','clean'], fn:galSlider},
+    {id:'mosaic', img:'req', min:3, fit:['bold','editorial','energy','luxury'], fn:galMosaic},
+    {id:'fade', img:'req', min:2, tone:'dark', fit:['luxury','calm','warm'], fn:galStrip}
+  ],
+  testimonials:[
+    {id:'grid', img:'none', fit:['clean','friendly','trust'], fn:revGrid},
+    {id:'slider', img:'none', fit:['friendly','warm','energy','clean'], fn:revSlider},
+    {id:'quote', img:'none', fit:['luxury','editorial','calm','classic'], fn:revQuote},
+    {id:'dark', img:'none', tone:'dark', fit:['bold','luxury','tech'], fn:revDark}
+  ],
+  faq:[
+    {id:'accordion', img:'none', fit:['clean','trust','friendly','classic'], fn:faqAcc},
+    {id:'side', img:'none', fit:['editorial','luxury','calm','tech'], fn:faqSide},
+    {id:'cards', img:'none', fit:['friendly','bold','energy','warm'], fn:faqCards}
+  ],
+  process_:[]
+};
+
+// Render one section locally (always succeeds; falls back to the first recipe)
+function renderLocal(sec, X){
+  var list = TPL[sec]; if(!list) return '';
+  var id = X.brief.recipes && X.brief.recipes[sec], t = null;
+  for(var i = 0; i < list.length; i++){ if(list[i].id === id) t = list[i]; }
+  if(!t) t = list.filter(function(x){ return x.img !== 'req'; })[0] || list[0];
+  var tone = (X.brief.tones && X.brief.tones[sec]) || 'light';
+  return t.fn(X, tone);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Page templates (nav, CTA, contact, footer) + fallbacks
+// ═══════════════════════════════════════════════════════════════════════════
+var SEC_LABEL = {services:'Services', about:'About', process:'How It Works', gallery:'Gallery', testimonials:'Reviews', faq:'FAQ'};
+var SEC_ORDER = ['services', 'about', 'process', 'gallery', 'testimonials', 'faq'];
+var IM = {};   // image key (lower-case) → URL / data URL, filled per build
+
+function fillImages(html){
+  return String(html || '').replace(/\{\{\s*IMG:([A-Za-z0-9_]+)\s*\}\}/g, function(m, k){ return IM[k.toLowerCase()] || ''; });
+}
+function heroBg(X){ return IM.hero1 ? 'url(' + IM.hero1 + ')' : ''; }
+
+function buildHead(X){
+  var c = X.c, b = X.brief, r = b.radius || {};
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n' +
+    '<meta name="description" content="' + esc(X.bn + ' — ' + X.bt + (X.loc ? ' in ' + X.loc : '')) + '">\n' +
+    '<title>' + esc(X.bn + (X.loc ? ' | ' + X.loc : '')) + '</title>\n' +
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">\n' +
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">\n' +
+    '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+    '<link href="' + esc(b.font.url) + '" rel="stylesheet">\n<style>\n' +
+    ':root{--p:' + c.p + ';--s:' + c.s + ';--a:' + c.a + ';--bg:' + c.bg + ';--lt:' + c.lt + ';--td:' + c.td + ';--tm:' + c.tm + ';--gr:' + c.gr +
+    ';--fh:' + b.font.head_stack + ';--fb:' + b.font.body_stack + ';--rc:' + (r.card || '16px') + ';--rb:' + (r.btn || '999px') + ';--ri:' + (r.img || '16px') + ';}\n' +
+    KIT_CSS + '\n</style>\n</head>\n';
+}
+
+function navLinks(X){
+  var l = [];
+  SEC_ORDER.forEach(function(s){ if(X.sections.indexOf(s) > -1) l.push(['#' + s, SEC_LABEL[s]]); });
+  l.push(['#contact', 'Contact']);
+  return l;
+}
+
+function buildBodyStart(X){
+  var feats = X.feats, c = X.c;
+  var logo = IM.logo ? '<img src="' + IM.logo + '" alt="' + esc(X.bn) + ' logo">' : '';
+  var brand = IM.logo ? logo : esc(X.bn);
+  var tone = X.brief.hero_tone === 'light' ? 'nav-light' : 'nav-dark';
+  var pos = feats.indexOf('sticky_header') > -1 ? 'nav-fixed' : 'nav-abs';
+  var links = navLinks(X);
+  var h = '<body>\n';
+  if(feats.indexOf('scroll_bar') > -1) h += '<div id="spb"></div>\n';
+  if(feats.indexOf('loader') > -1){
+    h += '<div id="ldr" style="position:fixed;inset:0;background:' + c.bg + ';z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s;"><div style="font-family:var(--fh);font-size:32px;font-weight:800;color:#fff;">' + esc(X.bn) + '</div><div style="width:180px;height:3px;background:rgba(255,255,255,.15);border-radius:3px;margin-top:18px;overflow:hidden;"><div style="height:100%;background:' + c.gr + ';animation:ldb 1.4s ease forwards;width:0;"></div></div></div>' +
+      '<style>@keyframes ldb{from{width:0}to{width:100%}}</style>' +
+      '<script>setTimeout(function(){var l=document.getElementById("ldr");if(l){l.style.opacity="0";l.style.visibility="hidden";setTimeout(function(){if(l.parentNode)l.parentNode.removeChild(l);},700);}},1500);<\/script>\n';
+  }
+  h += '<nav id="mainnav" class="' + pos + ' ' + tone + '"><div class="ctr" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">' +
+    '<a href="#home" class="nb">' + brand + '</a>' +
+    '<button id="navtog" type="button" aria-label="Menu">☰</button>' +
+    '<ul class="nav-lnks" style="display:flex;align-items:center;gap:24px;">' +
+    links.map(function(l){ return '<li><a class="nl" href="' + l[0] + '">' + l[1] + '</a></li>'; }).join('') +
+    (X.waL ? '<li><a class="btn-p" href="' + esc(X.waL) + '" target="_blank" rel="noopener" style="padding:10px 20px;font-size:13px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a></li>' : '') +
+    '</ul></div>' +
+    '<div id="navmob">' + links.map(function(l){ return '<a href="' + l[0] + '">' + l[1] + '</a>'; }).join('') +
+    (X.waL ? '<a href="' + esc(X.waL) + '" target="_blank" rel="noopener" style="color:#25D366;font-weight:700;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>' : '') +
+    '</div></nav>\n';
+  return h;
+}
+
+function skeleton(sec){
+  if(sec === 'hero') return '<section id="home" style="min-height:80vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:rgba(255,255,255,.7);font:600 15px system-ui">⏳ Hero ban raha hai…</section>';
+  return '<section style="padding:90px 24px;background:#f4f6fa;text-align:center;color:#8a97ab;font:600 14px system-ui">⏳ ' + (SEC_LABEL[sec] || sec) + ' ban raha hai…</section>';
+}
+
+function buildCTA(X){
+  var c = X.c, v = X.brief.seed % 3;
+  var phone = X.wa ? '<div style="font-size:clamp(20px,3vw,30px);font-weight:800;margin-bottom:24px;"><i class="fa-solid fa-phone"></i> ' + esc(X.wa) + '</div>' : '';
+  var btns = '<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">' +
+    (X.waL ? '<a href="' + esc(X.waL) + '" target="_blank" rel="noopener" class="btn-p" style="font-size:16px;padding:16px 40px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Us</a>' : '<a href="#contact" class="btn-p" style="font-size:16px;padding:16px 40px;">Contact Us</a>') +
+    (X.tel ? '<a href="tel:+' + X.tel + '" class="btn-o" style="font-size:15px;padding:15px 34px;"><i class="fa-solid fa-phone"></i> Call Now</a>' : '') + '</div>';
+  var sub = esc(X.ext || X.brief.cta_label + ' — ' + X.bn);
+  var bgImg = IM.hero1 || IM.about || IM.gal1 || '';
+  if(v === 0){
+    return '<section style="position:relative;padding:100px 24px;color:#fff;text-align:center;background:' + (bgImg ? 'url(' + bgImg + ') center/cover' : c.gr) + ';" data-aos="fade-up"><div style="position:absolute;inset:0;background:' + (bgImg ? 'rgba(0,0,0,.72)' : 'rgba(0,0,0,.12)') + ';"></div>' +
+      '<div class="ctr" style="position:relative;z-index:1;"><h2 style="font-size:clamp(28px,4vw,52px);margin-bottom:16px;">Ready to Get Started?</h2><p style="font-size:clamp(15px,2.4vw,18px);opacity:.88;max-width:560px;margin:0 auto 26px;">' + sub + '</p>' + phone + btns + '</div></section>\n';
+  }
+  if(v === 1){
+    return '<section style="position:relative;overflow:hidden;padding:90px 24px;background:' + c.gr + ';color:#fff;text-align:center;" data-aos="fade-up">' +
+      '<div style="position:absolute;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.08);top:-160px;left:-120px;"></div><div style="position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.07);bottom:-140px;right:-60px;"></div>' +
+      '<div class="ctr" style="position:relative;z-index:1;"><h2 style="font-size:clamp(28px,4vw,50px);margin-bottom:14px;">Let’s talk about your next step</h2><p style="font-size:clamp(15px,2.4vw,18px);opacity:.9;max-width:560px;margin:0 auto 26px;">' + sub + '</p>' + phone + btns + '</div></section>\n';
+  }
+  return '<section style="padding:80px 24px;background:var(--lt);" data-aos="fade-up"><div class="ctr"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;border-radius:var(--rc);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.12);">' +
+    '<div style="background:var(--bg);color:#fff;padding:clamp(32px,5vw,60px);"><span class="sbadge" style="background:rgba(255,255,255,.12);color:#fff;">' + esc(X.brief.cta_label) + '</span><h2 style="font-size:clamp(26px,3.4vw,42px);margin:6px 0 14px;">Ready to Get Started?</h2><p style="opacity:.8;max-width:420px;">' + sub + '</p></div>' +
+    '<div style="background:#fff;padding:clamp(32px,5vw,60px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:16px;color:var(--td);">' +
+    (X.wa ? '<div style="font-size:clamp(20px,2.6vw,28px);font-weight:800;"><i class="fa-solid fa-phone" style="color:var(--p)"></i> ' + esc(X.wa) + '</div>' : '') +
+    (X.waL ? '<a href="' + esc(X.waL) + '" target="_blank" rel="noopener" class="btn-p"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp</a>' : '<a href="#contact" class="btn-p">Contact Us</a>') +
+    (X.tel ? '<a href="tel:+' + X.tel + '" class="btn-g"><i class="fa-solid fa-phone"></i> Call Now</a>' : '') + '</div></div></div></section>\n';
+}
+
+function ctItem(icon, label, val){
+  return '<div style="display:flex;align-items:center;gap:14px;"><div style="width:50px;height:50px;min-width:50px;background:var(--gr);border-radius:var(--rc);display:flex;align-items:center;justify-content:center;"><i class="' + icon + '" style="color:#fff;font-size:18px;"></i></div><div><p style="font-size:10px;color:var(--tm);margin:0;text-transform:uppercase;letter-spacing:1px;font-weight:700;">' + label + '</p><p style="font-size:16px;font-weight:700;color:var(--td);margin:2px 0 0;">' + val + '</p></div></div>';
+}
+function buildContact(X){
+  var inp = 'padding:13px 16px;border:2px solid #e8ebf0;border-radius:calc(var(--rc) * .6);font-size:14px;outline:none;width:100%;font-family:var(--fb);';
+  var form = X.waBase ?
+    '<div data-aos="fade-left"><div style="background:#fff;border-radius:var(--rc);padding:clamp(24px,4vw,36px);box-shadow:0 8px 32px rgba(0,0,0,.09);"><h3 style="font-size:22px;margin:0 0 6px;">Send an enquiry</h3><p style="font-size:13px;color:var(--tm);margin:0 0 18px;">It opens WhatsApp with your message ready to send.</p>' +
+    '<form onsubmit="return wbSend(this)"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:12px;">' +
+    '<input name="n" type="text" placeholder="Full name" required style="' + inp + '"><input name="p" type="tel" placeholder="Phone" required style="' + inp + '"></div>' +
+    '<textarea name="m" placeholder="How can we help?" rows="3" style="' + inp + 'resize:vertical;margin-bottom:12px;display:block;"></textarea>' +
+    '<button type="submit" class="btn-p" style="width:100%;font-size:15px;"><i class="fa-brands fa-whatsapp"></i> Send on WhatsApp</button></form></div></div>' +
+    '<script>function wbSend(f){var d=new FormData(f);var t="Hi, I am "+d.get("n")+". Phone: "+d.get("p")+". "+(d.get("m")||"");window.open(' + JSON.stringify(X.waBase) + '+"?text="+encodeURIComponent(t),"_blank");return false;}<\/script>' : '';
+  var items = [];
+  if(X.wa) items.push(ctItem('fa-solid fa-phone', 'Phone / WhatsApp', esc(X.wa)));
+  if(X.loc) items.push(ctItem('fa-solid fa-location-dot', 'Location', esc(X.loc)));
+  if(X.hours) items.push(ctItem('fa-solid fa-clock', 'Hours', esc(X.hours)));
+  var map = X.loc ? '<div style="margin-top:36px;border-radius:var(--rc);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.09);" data-aos="fade-up"><iframe title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="border:0;width:100%;height:320px;display:block;" src="https://www.google.com/maps?q=' + encodeURIComponent(X.bn + ' ' + X.loc) + '&output=embed"></iframe></div>' : '';
+  return '<section id="contact" style="background:var(--lt);padding:90px 0;"><div class="ctr"><div class="ct-grid" style="display:grid;grid-template-columns:' + (form ? '1fr 1fr' : '1fr') + ';gap:52px;align-items:start;">' +
+    '<div data-aos="fade-right"><span class="sbadge">Contact Us</span><h2 style="font-size:clamp(26px,3.2vw,40px);margin:8px 0 14px;">Get In Touch</h2><p style="color:var(--tm);margin:0 0 26px;font-size:15px;">We’d love to hear from you.</p>' +
+    '<div style="display:flex;flex-direction:column;gap:18px;">' + items.join('') + '</div>' +
+    (X.waL ? '<a href="' + esc(X.waL) + '" target="_blank" rel="noopener" class="btn-p" style="background:#25D366;margin-top:26px;"><i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp</a>' : '') + '</div>' + form + '</div>' + map + '</div></section>\n';
+}
+
+function buildFooter(X){
+  var links = navLinks(X);
+  var colS = X.svc.slice(0, 5).map(function(s){ return '<div style="margin-bottom:8px;"><a href="#services" style="font-size:13px;color:rgba(255,255,255,.62);">' + esc(s) + '</a></div>'; }).join('');
+  var h5 = 'font-size:12px;font-weight:700;color:#fff;margin:0 0 14px;text-transform:uppercase;letter-spacing:1px;font-family:var(--fb);';
+  var logo = IM.logo ? '<img src="' + IM.logo + '" alt="' + esc(X.bn) + '" style="height:46px;width:auto;margin-bottom:14px;">' : '<div style="font-family:var(--fh);font-size:22px;font-weight:800;color:#fff;margin-bottom:14px;">' + esc(X.bn) + '</div>';
+  var contact = '';
+  if(X.wa) contact += '<div style="display:flex;gap:8px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.7);"><i class="fa-solid fa-phone" style="color:var(--a);margin-top:3px;width:14px;"></i><span>' + esc(X.wa) + '</span></div>';
+  if(X.loc) contact += '<div style="display:flex;gap:8px;margin-bottom:10px;font-size:13px;color:rgba(255,255,255,.7);"><i class="fa-solid fa-location-dot" style="color:var(--a);margin-top:3px;width:14px;"></i><span>' + esc(X.loc) + '</span></div>';
+  if(X.hours) contact += '<div style="display:flex;gap:8px;font-size:13px;color:rgba(255,255,255,.7);"><i class="fa-solid fa-clock" style="color:var(--a);margin-top:3px;width:14px;"></i><span>' + esc(X.hours) + '</span></div>';
+  var social = '';
+  if(X.waL) social += '<a href="' + esc(X.waL) + '" target="_blank" rel="noopener" aria-label="WhatsApp" style="width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;"><i class="fa-brands fa-whatsapp"></i></a>';
+  if(X.loc) social += '<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(X.bn + ' ' + X.loc) + '" target="_blank" rel="noopener" aria-label="Directions" style="width:36px;height:36px;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;"><i class="fa-solid fa-location-dot"></i></a>';
+  return '<footer style="background:var(--bg);color:rgba(255,255,255,.8);padding:64px 24px 22px;"><div class="ctr" style="padding:0;"><div class="ft-grid" style="display:grid;grid-template-columns:2fr 1fr 1fr 1.3fr;gap:36px;margin-bottom:40px;">' +
+    '<div>' + logo + '<p style="font-size:13px;line-height:1.8;color:rgba(255,255,255,.6);max-width:280px;">' + esc(X.svc.slice(0, 3).join(', ') || X.bt) + (X.loc ? ' in ' + esc(X.loc) : '') + '.</p><div style="display:flex;gap:10px;margin-top:18px;">' + social + '</div></div>' +
+    '<div><h5 style="' + h5 + '">Quick Links</h5>' + links.map(function(l){ return '<div style="margin-bottom:8px;"><a href="' + l[0] + '" style="font-size:13px;color:rgba(255,255,255,.62);">' + l[1] + '</a></div>'; }).join('') + '</div>' +
+    '<div><h5 style="' + h5 + '">' + esc(X.brief.svc_label) + '</h5>' + (colS || '<div style="font-size:13px;color:rgba(255,255,255,.62);">—</div>') + '</div>' +
+    '<div><h5 style="' + h5 + '">Contact</h5>' + contact + '</div></div>' +
+    '<div style="border-top:1px solid rgba(255,255,255,.12);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;"><p style="font-size:12px;color:rgba(255,255,255,.4);margin:0;">© ' + new Date().getFullYear() + ' ' + esc(X.bn) + '. All rights reserved.</p>' +
+    '<p style="font-size:11px;color:rgba(255,255,255,.4);margin:0;">Website by <a href="https://linkedin.com/in/rishab-sharma-dev" style="color:var(--a);">Rishabh Sharma</a></p></div></div></footer>\n';
+}
+
+function buildFloaters(X){
+  var h = '';
+  if(X.feats.indexOf('whatsapp') > -1 && X.waL){
+    h += '<a href="' + esc(X.waL) + '" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" style="position:fixed;bottom:24px;right:22px;z-index:9999;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;box-shadow:0 6px 20px rgba(37,211,102,.55);animation:wap 2s infinite;"><i class="fa-brands fa-whatsapp"></i></a>\n';
+  }
+  if(X.feats.indexOf('back_top') > -1) h += '<button id="btt" type="button" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>\n';
+  return h;
+}
+function buildScripts(X){
+  var opts = {counters: X.feats.indexOf('counters') > -1};
+  return '<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"><\/script>\n<script>(' + wbKit.toString() + ')(' + JSON.stringify(opts) + ');<\/script>\n</body></html>';
+}
+
+// ── Fallbacks (only used if Claude is unreachable for a section) ───────────
+function fbHero(X){
+  var bg = heroBg(X);
+  return '<section id="home" style="position:relative;min-height:100vh;display:flex;align-items:center;color:#fff;background:' + (bg ? bg + ' center/cover' : 'var(--gr)') + ';"><div style="position:absolute;inset:0;background:rgba(0,0,0,' + (bg ? '.62' : '.2') + ');"></div>' +
+    '<div class="ctr" style="position:relative;z-index:1;padding-top:120px;padding-bottom:80px;"><span class="sbadge" style="background:rgba(255,255,255,.15);color:#fff;">' + esc(X.bt) + (X.loc ? ' · ' + esc(X.loc) : '') + '</span>' +
+    '<h1 style="font-size:clamp(38px,6.5vw,80px);max-width:820px;margin:8px 0 18px;">' + esc(X.bn) + '</h1>' +
+    '<p style="font-size:clamp(15px,2vw,19px);max-width:560px;opacity:.9;margin-bottom:30px;">' + esc(X.ext || X.svc.slice(0, 4).join(' · ') || X.brief.cta_label) + '</p>' +
+    '<div style="display:flex;gap:14px;flex-wrap:wrap;">' + (X.waL ? '<a class="btn-p" href="' + esc(X.waL) + '" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> ' + esc(X.brief.cta_label) + '</a>' : '') + '<a class="btn-o" href="#services">Our Services →</a></div></div></section>';
+}
+function fbServices(X){
+  var names = X.svc.length ? X.svc : ['Service 1', 'Service 2', 'Service 3'];
+  var icons = ['fa-star', 'fa-heart', 'fa-gem', 'fa-shield-heart', 'fa-award', 'fa-circle-check', 'fa-bolt', 'fa-leaf'];
+  return '<section id="services" style="background:var(--lt);padding:90px 0;"><div class="ctr"><div style="text-align:center;margin-bottom:46px;"><span class="sbadge">' + esc(X.brief.svc_label) + '</span><h2 style="font-size:clamp(28px,4vw,44px);">What We Offer</h2></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;">' +
+    names.map(function(n, i){
+      var im = IM['svc' + (i + 1)];
+      var top = im ? '<img src="' + im + '" alt="' + esc(n) + '" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;">' : '<div style="aspect-ratio:4/3;background:var(--gr);display:flex;align-items:center;justify-content:center;"><i class="fa-solid ' + icons[i % icons.length] + '" style="font-size:44px;color:rgba(255,255,255,.85);"></i></div>';
+      var link = X.waBase ? '<a href="' + esc(X.waBase) + '?text=' + encodeURIComponent('Hi, I would like to know more about ' + n) + '" target="_blank" rel="noopener" style="font-weight:700;color:var(--p);font-size:14px;">Enquire →</a>' : '';
+      return '<div style="background:#fff;border-radius:var(--rc);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.08);">' + top + '<div style="padding:22px;"><h3 style="font-size:19px;margin-bottom:10px;">' + esc(n) + '</h3>' + link + '</div></div>';
+    }).join('') + '</div></div></section>';
+}
+function fbAbout(X){
+  var im = IM.about;
+  return '<section id="about" style="background:#fff;padding:90px 0;"><div class="ctr"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:56px;align-items:center;"><div><span class="sbadge">About Us</span><h2 style="font-size:clamp(28px,3.6vw,42px);margin:6px 0 16px;">' + esc(X.bn) + '</h2><p style="color:var(--tm);font-size:16px;line-height:1.85;">' + esc(X.ext || (X.bt + (X.loc ? ' in ' + X.loc : '') + '. Message us on WhatsApp to know more.')) + '</p></div>' +
+    '<div>' + (im ? '<img src="' + im + '" alt="' + esc(X.bn) + '" loading="lazy" style="width:100%;height:420px;object-fit:cover;border-radius:var(--ri);">' : '<div style="height:360px;border-radius:var(--ri);background:var(--gr);display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-building" style="font-size:80px;color:rgba(255,255,255,.3);"></i></div>') + '</div></div></div></section>';
+}
+function fbTestimonials(X){
+  var revs = X.reviews.length ? X.reviews.slice(0, 3) : [1, 2, 3].map(function(){ return {name:'Client name', text:'Sample review text — replace with a real customer review.', sample:true}; });
+  return '<section id="testimonials" style="background:var(--lt);padding:90px 0;"><div class="ctr"><div style="text-align:center;margin-bottom:44px;"><span class="sbadge">Reviews</span><h2 style="font-size:clamp(28px,4vw,42px);">What Clients Say</h2></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;">' +
+    revs.map(function(r){
+      return '<div style="background:#fff;border-radius:var(--rc);padding:28px;box-shadow:0 6px 24px rgba(0,0,0,.08);"' + (r.sample ? ' data-sample="true"' : '') + '><div style="color:#F59E0B;margin-bottom:12px;">★★★★★</div><p style="color:var(--tm);font-style:italic;line-height:1.75;margin-bottom:16px;">“' + esc(r.text) + '”</p><strong>' + esc(r.name || 'Google reviewer') + '</strong>' +
+        (r.sample ? '<div style="margin-top:10px;font-size:11px;font-weight:700;color:#b45309;background:#fef3c7;display:inline-block;padding:3px 9px;border-radius:99px;">Sample – replace with a real review</div>' : '') + '</div>';
+    }).join('') + '</div></div></section>';
+}
+function fbGallery(X){
+  var keys = Object.keys(IM).filter(function(k){ return /^gal\d+$/.test(k); });
+  if(!keys.length) return '';
+  return '<section id="gallery" style="background:#fff;padding:90px 0;"><div class="ctr"><div style="text-align:center;margin-bottom:40px;"><span class="sbadge">Gallery</span><h2 style="font-size:clamp(28px,4vw,42px);">Our Work</h2></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">' +
+    keys.map(function(k, i){ return '<img src="{{IMG:' + k + '}}" data-lightbox alt="' + esc(X.bn) + ' photo ' + (i + 1) + '" loading="lazy" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--ri);">'; }).join('') + '</div></div></section>';
+}
+var FALLBACK = {hero:fbHero, services:fbServices, about:fbAbout, testimonials:fbTestimonials, gallery:fbGallery};
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Generate
+// ═══════════════════════════════════════════════════════════════════════════
+function defaultBrief(){
+  return {seed:Math.floor(Math.random() * 1e9), font:{id:'playfair-inter', head:'Playfair Display', body:'Inter',
+    url:'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap',
+    head_stack:"'Playfair Display',Georgia,serif", body_stack:"'Inter',system-ui,sans-serif"},
+    radius:{id:'soft', card:'20px', btn:'999px', img:'20px'}, motif:'', mood:'', svc_label:'Our Services', cta_label:'Get in touch',
+    recipes:{}, tones:{hero:'dark'}, hero_tone:'dark', ids:[]};
+}
+async function apiPost(payload){
+  var r = await fetch('/api/generate', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+  var txt = await r.text(), d = null;
+  try{ d = JSON.parse(txt); }catch(_){}
+  if(!r.ok || !d || d.error){
+    var msg = (d && d.error) ? d.error : (d && d.detail ? JSON.stringify(d.detail).slice(0, 200) : txt.replace(/\s+/g, ' ').slice(0, 160));
+    var e = new Error('HTTP ' + r.status + ' — ' + msg); e.status = r.status; throw e;
+  }
+  return d;
+}
+async function runPool(tasks, n){
+  var i = 0;
+  var ws = [];
+  for(var k = 0; k < n; k++){
+    ws.push((async function(){ while(i < tasks.length){ var t = tasks[i++]; await t(); } })());
+  }
+  await Promise.all(ws);
+}
+
+var BUILDING = false;
+async function generate(){
+  if(BUILDING) return;
+  var bt = $('bt').value, bn = $('bn').value.trim();
+  if(!bt || !bn){ alert('Industry aur Business Name zaroori hai!'); return; }
+  if(MODE === 'claude' && AI_OK === false && !confirm('Claude se connection nahi hai (upar Setup dekho). Phir bhi simple fallback design banayein?')) return;
+
+  var loc = $('loc').value.trim(), wa = $('wa').value.trim(), ext = $('ext').value.trim();
+  var svc = parseServices($('svc').value);
+  var hours = $('hours').value.trim(), rating = $('rating').value.trim(), rvn = $('rvn').value.trim();
+  var reviews = parseReviews($('revs').value);
+  var feats = chipVals('feat-wrap'), uk = lsGet('wb_uk', '');
+  var ct = $('ct').value;
+  if(ct === 'random'){
+    var keys = Object.keys(PAL).filter(function(k){ return k !== lsGet('wb_lastpal', ''); });
+    ct = keys[Math.floor(Math.random() * keys.length)]; lsSet('wb_lastpal', ct);
+  }
+  var c = PAL[ct] || PAL.blue;
+  var num = normPhone(wa);
+
+  BUILDING = true;
+  $('gen-btn').disabled = true;
+  $('prog').classList.add('show'); $('res-btns').classList.remove('show');
+  $('steps').innerHTML = '';
+  $('prev-title').textContent = 'Building website...';
+  setProg(2, 'Starting build...');
+
+  // ── images ───────────────────────────────────────────────────────────────
+  IM = {}; var LABEL = {};
+  function put(k, url, label){ IM[k] = url; LABEL[k] = label; }
+  ['hero1', 'hero2', 'hero3'].forEach(function(k, i){ if(IMGS[k]) put(k, IMGS[k], 'Hero photo ' + (i + 1) + ' (wide banner photo of the business)'); });
+  if(IMGS.about) put('about', IMGS.about, 'About / team / premises photo');
+  if(IMGS.logo) IM.logo = IMGS.logo;
+  svc.forEach(function(n, i){ var u = SVCIMG[n.toLowerCase()]; if(u) put('svc' + (i + 1), u, 'Photo for the service "' + n + '"'); });
+  GAL.forEach(function(u, i){ put('gal' + (i + 1), u, 'Gallery photo ' + (i + 1)); });
+
+  if(uk){
+    var si = addStep('Unsplash se stock photos la raha hoon…');
+    var jobs = [];
+    if(!IM.hero1) jobs.push(unsplash(bt + ' interior professional', uk, 2).then(function(u){ u.forEach(function(x, i){ put('hero' + (i + 1), x, 'Hero photo ' + (i + 1) + ' (wide banner photo)'); }); }));
+    if(!IM.about) jobs.push(unsplash(bt + ' team', uk, 1).then(function(u){ if(u[0]) put('about', u[0], 'About / team photo'); }));
+    if(!GAL.length) jobs.push(unsplash(bt + ' work gallery', uk, 5).then(function(u){ u.forEach(function(x, i){ put('gal' + (i + 1), x, 'Gallery photo ' + (i + 1)); }); }));
+    if($('unsvc').checked) svc.forEach(function(n, i){ if(!IM['svc' + (i + 1)]) jobs.push(unsplash(n + ' ' + bt, uk, 1).then(function(u){ if(u[0]) put('svc' + (i + 1), u[0], 'Photo for the service "' + n + '"'); })); });
+    await Promise.all(jobs);
+    doneStep(si, Object.keys(IM).length + ' photos ready');
+  }
+  var count = function(re){ return Object.keys(IM).filter(function(k){ return re.test(k); }).length; };
+  var imgCounts = {hero:count(/^hero\d$/), about:IM.about ? 1 : 0, svc:count(/^svc\d+$/), gal:count(/^gal\d+$/)};
+  setProg(10);
+
+  // ── sections to build ────────────────────────────────────────────────────
+  var chosen = chipVals('sec-wrap');
+  var IND_ = indFor(bt), LAW = IND_.k === 'law';
+  var sections = SEC_ORDER.filter(function(s){
+    if(LAW) return s === 'services' || s === 'about' || (s === 'gallery' && chosen.indexOf(s) > -1 && imgCounts.gal > 0);
+    if(s === 'services') return true;
+    if(s === 'gallery') return chosen.indexOf(s) > -1 && imgCounts.gal > 0;
+    return chosen.indexOf(s) > -1;
+  });
+  if(chosen.indexOf('gallery') > -1 && imgCounts.gal === 0) addStep('Gallery skip: koi gallery photo nahi (photos add karo ya Unsplash key lagao)', 'act');
+
+  // ── design brief (new layout every time) ─────────────────────────────────
+  var sb = addStep('Naya design chun raha hoon…');
+  var hist = []; try{ hist = JSON.parse(lsGet('wb_hist', '[]')); }catch(e){}
+  var brief;
+  if(MODE === 'free'){
+    brief = localBrief({seed:Math.floor(Math.random() * 1e9), bt:bt, style_pref:$('sp').value, avoid:hist.slice(0, 24), img_counts:imgCounts, sections:sections});
+    doneStep(sb, 'Design: ' + brief.font.head + ' + ' + brief.font.body + ' · hero=' + brief.recipes.hero + ' · services=' + brief.recipes.services);
+  } else {
+    try{
+      brief = await apiPost({section:'brief', seed:Math.floor(Math.random() * 1e9), bt:bt, style_pref:$('sp').value, avoid:hist.slice(0, 24), img_counts:imgCounts, sections:sections});
+      doneStep(sb, 'Design: ' + brief.font.head + ' + ' + brief.font.body + ' · hero=' + brief.recipes.hero + ' · services=' + brief.recipes.services);
+    }catch(e){
+      brief = defaultBrief(); errStep(sb, 'Design engine: ' + e.message.slice(0, 150));
+    }
+  }
+  lsSet('wb_hist', JSON.stringify((brief.ids || []).concat(hist).slice(0, 40)));
+  setProg(14);
+
+  var X = {bn:bn, bt:bt, loc:loc, wa:wa, tel:num, waBase:num ? 'https://wa.me/' + num : '', waL:num ? 'https://wa.me/' + num : '',
+    hours:hours, rating:rating, rvn:rvn, ext:ext, svc:svc, reviews:reviews, c:c, brief:brief, feats:feats, sections:sections, ind:IND_, law:LAW};
+  var facts = {name:bn, type:bt, city:loc, phone:wa, wa_link:X.waL, usp:ext, rating:rating, reviews_n:rvn, hours:hours, services:svc, reviews:reviews};
+  var images = Object.keys(LABEL).map(function(k){ return {key:k, label:LABEL[k]}; });
+
+  // ── build sections with Claude (2 at a time) ─────────────────────────────
+  var order = ['hero'].concat(sections), RES = {}, fails = [], done = 0, last = 0;
+  function render(final){
+    var parts = [buildHead(X), buildBodyStart(X)];
+    order.forEach(function(s){ var r = RES[s]; if(r) parts.push(fillImages(r.html)); else if(!final) parts.push(skeleton(s)); });
+    parts.push(buildCTA(X), buildContact(X), buildFooter(X), buildFloaters(X), buildScripts(X));
+    return parts.join('\n');
+  }
+  function preview(final){
+    var now = Date.now(); if(!final && now - last < 700) return; last = now;
+    showLivePreview(render(final));
+  }
+  preview(false);
+  var tasks = order.map(function(sec){
+    return async function(){
+      var recipe = (brief.recipes && brief.recipes[sec]) || 'default';
+      var sid = addStep('Building ' + sec + ' (' + recipe + ')…');
+      try{
+        if(MODE === 'free'){
+          RES[sec] = {html:renderLocal(sec, X), src:'Template'};
+          doneStep(sid, sec + ' ready (' + recipe + ')');
+          done++; setProg(14 + 80 * done / order.length, 'Building… ' + done + '/' + order.length); preview(false); return;
+        }
+        var d = await apiPost({section:sec, brief:brief, facts:facts, images:images});
+        RES[sec] = {html:d.html, src:'Claude'};
+        doneStep(sid, sec + ' ready (' + recipe + ')' + (d.truncated ? ' — thoda cut hua, auto-fix kiya' : ''));
+      }catch(e){
+        fails.push(sec + ': ' + e.message);
+        errStep(sid, sec + ' → fallback. Wajah: ' + e.message.slice(0, 200));
+        var fb = FALLBACK[sec];
+        RES[sec] = {html:fb ? fb(X) : '', src:'Fallback'};
+      }
+      done++; setProg(14 + 80 * done / order.length, 'Building… ' + done + '/' + order.length);
+      preview(false);
+    };
+  });
+  await runPool(tasks, 2);
+
+  setProg(97, 'Final touches…');
+  var final = render(true);
+  window._html = final; window._name = bn;
+  showLivePreview(final);
+  setProg(100, '✅ Website complete!');
+
+  var claudeCount = order.filter(function(s){ return RES[s] && (RES[s].src === 'Claude' || RES[s].src === 'Template'); }).length;
+  var usedSamples = sections.indexOf('testimonials') > -1 && !reviews.length;
+  $('prev-title').textContent = bn + ' — Preview (' + (MODE === 'free' ? 'Free mode' : claudeCount + '/' + order.length + ' sections Claude se') + ')';
+  $('res-info').innerHTML = '✅ <strong>' + esc(bn) + '</strong> · ' + Math.round(final.length / 1024) + ' KB<br>' +
+    '🎨 ' + esc(brief.font.head) + ' + ' + esc(brief.font.body) + ' · hero: ' + esc(brief.recipes.hero || '—') + ' · services: ' + esc(brief.recipes.services || '—') + '<br>' +
+    (MODE === 'free' ? '🆓 Free mode — koi API use nahi hui' : '🤖 Claude: ' + claudeCount + '/' + order.length + ' sections') +
+    (fails.length ? '<br><span style="color:#ffb86b">⚠️ ' + fails.length + ' section(s) fallback pe gaye — upar steps me wajah dekho.</span>' : '') +
+    (usedSamples && sections.indexOf('testimonials') > -1 ? '<br><span style="color:#ffcf6b">📝 Reviews "Sample" label wale hain — client ko dene se pehle asli reviews paste karke dobara banao.</span>' : '');
+  $('res-btns').classList.add('show');
+  $('gen-btn').disabled = false;
+  BUILDING = false;
+}
+
+// ── Preview / download ──────────────────────────────────────────────────────
+function showLivePreview(html){
+  var fr = $('prev-frame');
+  fr.srcdoc = html;
+  $('prev-placeholder').style.display = 'none';
+  fr.style.display = 'block';
+}
+function showPreview(){ if(window._html) showLivePreview(window._html); }
+function openNewTab(){
+  if(!window._html) return;
+  var url = URL.createObjectURL(new Blob([window._html], {type:'text/html'}));
+  window.open(url, '_blank');
+}
+function dlPage(){
+  if(!window._html) return;
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([window._html], {type:'text/html'}));
+  a.download = (window._name || 'website').replace(/[^\w]+/g, '-').toLowerCase() + '-website.html';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function shareWA(){
+  dlPage();
+  setTimeout(function(){
+    var msg = 'Hi! *' + (window._name || 'Website') + '* ke liye ek professional website banayi hai!\n\n✅ Modern responsive design\n✅ WhatsApp integration\n✅ Mobile perfect\n\nHTML file bhej raha hun!\n\n— Rishabh Sharma, Web Developer\n📞 +91 88514 71308';
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  }, 800);
+}
+
+</script>
+</body>
+</html>
